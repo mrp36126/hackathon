@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Absa Agent Employee Demo</title>
+  <style>
+    :root {
+      --absa-red: #dd0031;
+      --absa-deep: #7a001b;
+      --ink: #17171a;
+      --muted: #626772;
+      --line: #e2e6ec;
+      --soft: #f4f6f8;
+      --paper: #fffaf7;
+      --green: #13a36f;
+      --gold: #f1b638;
+      --blue: #206fb7;
+      --terminal: #06190d;
+      --terminal-line: #174a27;
+      --terminal-text: #76ff9c;
+      --sf-blue: #0176d3;
+      --shadow: 0 26px 80px rgba(20, 20, 24, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(221,0,49,0.08), rgba(32,111,183,0.08) 52%, rgba(19,163,111,0.10)),
+        #f2f4f7;
+      letter-spacing: 0;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 16px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 260px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      background: var(--absa-red);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 10px 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: var(--absa-red);
+      color: #fff;
+      border-color: var(--absa-red);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .workspace {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 34px rgba(20,20,24,0.05);
+    }
+
+    .panel-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .panel-head h2,
+    .panel-head h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .panel-head h2 {
+      font-size: 25px;
+    }
+
+    .panel-head h3 {
+      font-size: 19px;
+    }
+
+    .panel-body {
+      padding: 18px;
+    }
+
+    .kicker {
+      color: var(--absa-red);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .customer-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #fff1f3;
+      border: 1px solid #ffd0d8;
+      color: var(--absa-deep);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .customer-card h2 {
+      margin: 0 0 5px;
+      font-size: 28px;
+    }
+
+    .customer-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid #cfeede;
+      color: #08784f;
+      background: #effbf5;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 7px 9px;
+      white-space: nowrap;
+    }
+
+    .badge.red {
+      border-color: #ffd0d8;
+      color: var(--absa-deep);
+      background: #fff1f3;
+    }
+
+    .badge.blue {
+      border-color: #d0e7ff;
+      color: #0c5da3;
+      background: #eef7ff;
+    }
+
+    .signals {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .signal {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      padding: 12px;
+      min-height: 92px;
+    }
+
+    .signal strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .signal span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 13px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--absa-red);
+      font-size: 26px;
+      margin-top: 5px;
+    }
+
+    .views {
+      display: none;
+    }
+
+    .views.active {
+      display: grid;
+      gap: 18px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      min-height: 560px;
+    }
+
+    .terminal {
+      background: var(--terminal);
+      color: var(--terminal-text);
+      font-family: Consolas, "Courier New", monospace;
+      border: 1px solid var(--terminal-line);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 620px;
+    }
+
+    .terminal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--terminal-line);
+      color: #caffd8;
+      font-weight: 800;
+    }
+
+    .terminal-screen {
+      padding: 16px;
+      white-space: pre-wrap;
+      line-height: 1.42;
+      font-size: 15px;
+      overflow: auto;
+    }
+
+    .terminal-input {
+      border-top: 1px solid var(--terminal-line);
+      padding: 13px 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .terminal-input input {
+      background: #031007;
+      color: var(--terminal-text);
+      border: 1px solid var(--terminal-line);
+      padding: 10px;
+      min-width: 0;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .terminal-input button,
+    .primary,
+    .secondary {
+      border: 0;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .terminal-input button {
+      background: var(--terminal-text);
+      color: #031007;
+      padding: 10px 13px;
+    }
+
+    .primary {
+      background: var(--absa-red);
+      color: #fff;
+      padding: 11px 13px;
+      min-height: 43px;
+    }
+
+    .secondary {
+      background: #fff4f5;
+      color: var(--absa-deep);
+      border: 1px solid #ffd2d9;
+      padding: 10px 12px;
+      min-height: 43px;
+    }
+
+    .instruction {
+      display: grid;
+      gap: 12px;
+    }
+
+    .instruction p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.4;
+      font-size: 15px;
+    }
+
+    .command-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .command {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 12px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .command strong {
+      font-family: Consolas, "Courier New", monospace;
+      color: var(--absa-deep);
+    }
+
+    .command span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .salesforce {
+      background: #f8fbff;
+      border: 1px solid #d5e8fb;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 620px;
+    }
+
+    .sf-header {
+      background: #fff;
+      border-bottom: 1px solid #d5e8fb;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sf-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--sf-blue);
+      font-weight: 900;
+    }
+
+    .sf-dot {
+      width: 40px;
+      height: 27px;
+      border-radius: 15px;
+      background: var(--sf-blue);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+    }
+
+    .sf-body {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 0;
+    }
+
+    .sf-side {
+      background: #fff;
+      border-right: 1px solid #d5e8fb;
+      padding: 14px;
+      display: grid;
+      gap: 9px;
+      align-content: start;
+    }
+
+    .sf-nav {
+      border: 1px solid #d5e8fb;
+      background: #f8fbff;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #1b4264;
+    }
+
+    .sf-nav.active {
+      background: #eaf5ff;
+      border-left: 4px solid var(--sf-blue);
+    }
+
+    .sf-main {
+      padding: 16px;
+      overflow: auto;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .sf-card {
+      background: #fff;
+      border: 1px solid #d5e8fb;
+      padding: 14px;
+    }
+
+    .sf-card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 9px;
+    }
+
+    .timeline-item {
+      border-left: 4px solid var(--sf-blue);
+      background: #f8fbff;
+      padding: 10px 12px;
+      color: #1b4264;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .next-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .script {
+      border: 1px solid #ffd4dc;
+      background: #fff7f8;
+      padding: 13px;
+      line-height: 1.45;
+      color: #3d1d24;
+      font-size: 15px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .field {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 10px;
+    }
+
+    .field span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .field strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 16px;
+    }
+
+    .log {
+      background: #18191d;
+      color: #f7f7f7;
+      padding: 14px;
+      min-height: 160px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.48;
+      overflow: auto;
+    }
+
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .audit-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px;
+      min-height: 160px;
+    }
+
+    .audit-card h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .audit-card p {
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.38;
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      background: #18191d;
+      color: #fff;
+      padding: 13px 15px;
+      max-width: 420px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: 230ms ease;
+      z-index: 10;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 1100px) {
+      .overview,
+      .split,
+      .audit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .signals,
+      .metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sf-body {
+        grid-template-columns: 1fr;
+      }
+
+      .sf-side {
+        grid-template-columns: repeat(3, 1fr);
+        border-right: 0;
+        border-bottom: 1px solid #d5e8fb;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .header {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .workspace {
+        padding: 14px;
+      }
+
+      .customer-card,
+      .field-grid,
+      .next-actions,
+      .signals,
+      .metrics,
+      .sf-side {
+        grid-template-columns: 1fr;
+      }
+
+      .terminal-screen {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">A</div>
+        <div>
+          <h1>Absa Agent Employee Console</h1>
+          <span>Same customer. Two employee channels. One orchestration layer.</span>
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Employee demo views">
+        <button class="tab active" type="button" data-view="overview">Context</button>
+        <button class="tab" type="button" data-view="cams">CAMS Mainframe</button>
+        <button class="tab" type="button" data-view="salesforce">Salesforce Branch</button>
+        <button class="tab" type="button" data-view="audit">API + Audit Trail</button>
+      </nav>
+      <div class="status"><span class="dot"></span> Absa Agent decision active</div>
+    </header>
+
+    <section class="workspace">
+      <section class="views active" id="overview">
+        <div class="overview">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="kicker">Customer context</div>
+                <h2>Thando Mokoena</h2>
+              </div>
+              <span class="badge red">Emerging Home Buyer</span>
+            </div>
+            <div class="panel-body">
+              <div class="customer-card">
+                <div class="avatar">TM</div>
+                <div>
+                  <h2>High-value next conversation</h2>
+                  <p>Absa Agent detected home-buying intent and routed the same insight to CAMS and Salesforce with channel-appropriate detail.</p>
+                </div>
+                <span class="badge">Confidence 87%</span>
+              </div>
+              <div class="signals">
+                <div class="signal"><strong>Rent pattern</strong><span>R10,500 recurring monthly rental payment.</span></div>
+                <div class="signal"><strong>Income stability</strong><span>Salary deposits consistent for six months.</span></div>
+                <div class="signal"><strong>Savings growth</strong><span>18% increase over six months.</span></div>
+                <div class="signal"><strong>Digital intent</strong><span>Home loan calculator used twice.</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="kicker">Next best action</div>
+                <h3>Guide, do not hard sell</h3>
+              </div>
+              <span class="badge blue">Consent checked</span>
+            </div>
+            <div class="panel-body">
+              <div class="metrics">
+                <div class="metric"><span>Readiness</span><strong>82%</strong></div>
+                <div class="metric"><span>Upfront gap</span><strong>R35k</strong></div>
+                <div class="metric"><span>Lead priority</span><strong>A2</strong></div>
+              </div>
+              <div style="height:14px"></div>
+              <div class="script">
+                <strong>Recommended employee approach:</strong><br>
+                "I can see you may be exploring home ownership. Would you like help checking what you could afford and what upfront costs to plan for?"
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="views" id="cams">
+        <div class="split">
+          <section class="terminal" aria-label="CAMS green screen demo">
+            <div class="terminal-head">
+              <span>ABSA CAMS 3270 SESSION</span>
+              <span>USR: NDL108 | BR: 6321</span>
+            </div>
+            <pre class="terminal-screen" id="terminalScreen">CAMS 26.05.2026 09:44:12        CUSTOMER ACTION MANAGEMENT SYSTEM
+-------------------------------------------------------------------------------
+CUSTOMER:  8001842231  MOKOENA, THANDO                 SEG: PREMIER
+ID NO:     ****** **** 082                              CONSENT: PERS-DIG Y
+ACCOUNT:   CHQ ****1842                                 RISK FLAGS: NONE
+-------------------------------------------------------------------------------
+ABSA AGENT ALERT:  A2 - EMERGING HOME BUYER             CONF: 87%
+NBA CODE: HML-RDY-01                                    EXP: VIEW AGEX
+
+SIGNAL SUMMARY:
+  S01 RENT_PAY_REG     R10,500 MONTHLY BENEFICIARY MATCH
+  S02 SAL_STABLE       6 MONTH STABLE SALARY PATTERN
+  S03 SAVE_GROWTH      +18% SAVINGS BALANCE TREND
+  S04 DIG_INTENT       HOME LOAN CALCULATOR x2 / 30 DAYS
+
+RECOMMENDED ACTION:
+  DO NOT START HARD SELL. OFFER HOME READINESS CHECK.
+  IF CUSTOMER AGREES: F9 CREATE HML PREQUAL LEAD.
+  IF ADVICE REQUESTED: F10 ROUTE TO BRANCH CONSULTANT.
+
+PF1 HELP  PF3 EXIT  PF5 REFRESH  PF8 HISTORY  PF9 CREATE LEAD  PF10 ROUTE</pre>
+            <div class="terminal-input">
+              <input id="camsCommand" value="F9" aria-label="CAMS command input">
+              <button type="button" id="runCommand">Enter</button>
+            </div>
+          </section>
+
+          <aside class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="kicker">CAMS employee experience</div>
+                <h3>AI insight in a legacy workflow</h3>
+              </div>
+              <span class="badge">Green screen safe</span>
+            </div>
+            <div class="panel-body instruction">
+              <p>The CAMS employee does not need a new UI. Absa Agent compresses the insight into codes, reason lines, and function-key actions that fit the mainframe workflow.</p>
+              <div class="command-list">
+                <button class="command" type="button" data-command="AGEX"><strong>AGEX</strong><span>View explanation and reason codes</span></button>
+                <button class="command" type="button" data-command="F8"><strong>F8</strong><span>View signal and interaction history</span></button>
+                <button class="command" type="button" data-command="F9"><strong>F9</strong><span>Create prequalification lead</span></button>
+                <button class="command" type="button" data-command="F10"><strong>F10</strong><span>Route to branch consultant in Salesforce</span></button>
+              </div>
+              <button class="primary" type="button" data-view-jump="salesforce">Show Salesforce handoff</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="views" id="salesforce">
+        <section class="salesforce" aria-label="Salesforce branch consultant demo">
+          <div class="sf-header">
+            <div class="sf-logo"><div class="sf-dot">SF</div> Salesforce Branch Console</div>
+            <span class="badge red">Absa Agent routed lead</span>
+          </div>
+          <div class="sf-body">
+            <aside class="sf-side">
+              <div class="sf-nav active">Customer 360</div>
+              <div class="sf-nav">Tasks</div>
+              <div class="sf-nav">Products</div>
+              <div class="sf-nav">Documents</div>
+              <div class="sf-nav">Appointments</div>
+            </aside>
+            <section class="sf-main">
+              <div class="sf-card">
+                <div class="customer-card">
+                  <div class="avatar">TM</div>
+                  <div>
+                    <h2>Thando Mokoena</h2>
+                    <p>Premier customer | Johannesburg | Preferred channel: App + consultant call</p>
+                  </div>
+                  <span class="badge">Lead priority A2</span>
+                </div>
+              </div>
+
+              <div class="sf-card">
+                <h3>Absa Agent insight</h3>
+                <div class="field-grid">
+                  <div class="field"><span>Intent</span><strong>Emerging Home Buyer</strong></div>
+                  <div class="field"><span>Confidence</span><strong>87%</strong></div>
+                  <div class="field"><span>Readiness score</span><strong>82%</strong></div>
+                  <div class="field"><span>Recommended action</span><strong>Prequalify + savings plan</strong></div>
+                </div>
+              </div>
+
+              <div class="sf-card">
+                <h3>Suggested conversation</h3>
+                <div class="script">
+                  "Hi Thando, I see you completed a home readiness check in the Absa app. You appear close to prequalification, and the main planning gap is upfront transfer and bond registration costs. Would you like me to help you understand the next steps?"
+                </div>
+              </div>
+
+              <div class="sf-card">
+                <h3>Timeline</h3>
+                <div class="timeline" id="sfTimeline">
+                  <div class="timeline-item">09:41 Mobile card shown: Thinking about buying a home?</div>
+                  <div class="timeline-item">09:42 Customer opened explainability reason codes.</div>
+                  <div class="timeline-item">09:43 Readiness check completed. Score: 82%.</div>
+                  <div class="timeline-item">09:44 CAMS user created prequalification lead.</div>
+                </div>
+              </div>
+
+              <div class="next-actions">
+                <button class="primary" type="button" id="bookAppointment">Book branch appointment</button>
+                <button class="secondary" type="button" id="sendChecklist">Send document checklist</button>
+                <button class="secondary" type="button" id="createSavings">Create transfer-cost savings pocket</button>
+                <button class="primary" type="button" id="markAccepted">Mark customer interested</button>
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
+
+      <section class="views" id="audit">
+        <div class="audit-grid">
+          <article class="audit-card">
+            <h3>Detect</h3>
+            <p>Transaction, savings, CRM, product, digital calculator, and consent signals formed a customer context.</p>
+          </article>
+          <article class="audit-card">
+            <h3>Decide</h3>
+            <p>Rules and scoring classified Thando as Emerging Home Buyer and selected a readiness journey.</p>
+          </article>
+          <article class="audit-card">
+            <h3>Act</h3>
+            <p>Mobile card, CAMS alert, Salesforce lead, appointment, and document checklist actions are executed via APIs.</p>
+          </article>
+          <article class="audit-card">
+            <h3>Learn</h3>
+            <p>Outcomes from customer actions and employee disposition update future next-best-action decisions.</p>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="kicker">Live orchestration log</div>
+              <h3>API and audit trail</h3>
+            </div>
+            <button class="secondary" type="button" id="resetLog">Reset demo log</button>
+          </div>
+          <div class="panel-body">
+            <pre class="log" id="eventLog">[09:41:02] context.build customer=8001842231 sources=txn,crm,digital,consent
+[09:41:03] intent.score model=home_buyer_v1 score=0.87 label=EMERGING_HOME_BUYER
+[09:41:04] guardrail.check consent=PERS-DIG:Y vulnerability:N credit_policy:PASS
+[09:41:05] nba.rank selected=HML-RDY-01 reason="guide before sell"
+[09:41:06] channel.mobile.card.sent template=HOME_READY_V2
+[09:44:12] channel.cams.alert.sent code=A2 nba=HML-RDY-01
+[09:44:15] channel.salesforce.lead.created owner=BRANCH_HOME_FINANCE queue=JHB_PREMIER</pre>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const views = Array.from(document.querySelectorAll('.views'));
+    const terminalScreen = document.getElementById('terminalScreen');
+    const eventLog = document.getElementById('eventLog');
+    const toast = document.getElementById('toast');
+    const sfTimeline = document.getElementById('sfTimeline');
+    const initialTerminal = terminalScreen.textContent;
+    const initialLog = eventLog.textContent;
+
+    function now() {
+      return new Date().toTimeString().slice(0, 8);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function addLog(message) {
+      eventLog.textContent += `\n[${now()}] ${message}`;
+      eventLog.scrollTop = eventLog.scrollHeight;
+    }
+
+    function addTimeline(message) {
+      const item = document.createElement('div');
+      item.className = 'timeline-item';
+      item.textContent = `${now().slice(0, 5)} ${message}`;
+      sfTimeline.appendChild(item);
+    }
+
+    function showView(id) {
+      tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.view === id));
+      views.forEach((view) => view.classList.toggle('active', view.id === id));
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => showView(tab.dataset.view));
+    });
+
+    document.querySelectorAll('[data-view-jump]').forEach((button) => {
+      button.addEventListener('click', () => showView(button.dataset.viewJump));
+    });
+
+    document.querySelectorAll('[data-command]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.getElementById('camsCommand').value = button.dataset.command;
+        runCamsCommand(button.dataset.command);
+      });
+    });
+
+    document.getElementById('runCommand').addEventListener('click', () => {
+      runCamsCommand(document.getElementById('camsCommand').value.trim().toUpperCase());
+    });
+
+    function runCamsCommand(command) {
+      if (!command) return;
+
+      if (command === 'AGEX') {
+        terminalScreen.textContent = `${initialTerminal}
+
+-------------------------------------------------------------------------------
+AGEX - ABSA AGENT EXPLANATION
+-------------------------------------------------------------------------------
+DECISION:       EMERGING HOME BUYER
+CONFIDENCE:     87%
+SELECTED NBA:   HML-RDY-01 HOME READINESS CHECK
+
+WHY THIS CUSTOMER:
+  1. RENTAL BENEFICIARY PATTERN MATCHED FOR 6 MONTHS
+  2. SALARY STABILITY PASSED THRESHOLD
+  3. SAVINGS BALANCE TREND POSITIVE
+  4. HOME LOAN CALCULATOR USED TWICE IN DIGITAL CHANNEL
+
+WHY THIS ACTION:
+  CUSTOMER IS NOT YET BEST SERVED BY A HARD APPLICATION PUSH.
+  READINESS JOURNEY REDUCES ABANDONMENT AND IMPROVES PREQUAL QUALITY.
+
+GOVERNANCE:
+  CONSENT CHECK PASSED. CREDIT APPROVAL NOT PERFORMED IN THIS STEP.
+  FULL DECISION LOG AVAILABLE VIA AUDIT EVENT AGT-20260526-1842.`;
+        showToast('CAMS explanation opened with reason codes.');
+        addLog('channel.cams.explanation.viewed command=AGEX user=NDL108');
+      }
+
+      if (command === 'F8') {
+        terminalScreen.textContent = `${initialTerminal}
+
+-------------------------------------------------------------------------------
+CUSTOMER SIGNAL HISTORY
+-------------------------------------------------------------------------------
+2026-05-02  DIGITAL_CALC     HOME_LOAN_CALCULATOR_VIEW
+2026-05-09  DIGITAL_CALC     HOME_LOAN_CALCULATOR_VIEW
+2026-05-25  TXN_PATTERN      RENTAL_PAYMENT_CONFIRMED R10,500
+2026-05-26  AGENT_DECISION   EMERGING_HOME_BUYER CONF 87
+2026-05-26  MOBILE_ACTION    READINESS_CHECK_COMPLETED SCORE 82
+2026-05-26  CAMS_ALERT       AGENT ALERT A2 DISPLAYED`;
+        showToast('CAMS signal history loaded.');
+        addLog('channel.cams.history.viewed command=F8 user=NDL108');
+      }
+
+      if (command === 'F9') {
+        terminalScreen.textContent = `${initialTerminal}
+
+-------------------------------------------------------------------------------
+LEAD CREATE CONFIRMATION
+-------------------------------------------------------------------------------
+LEAD TYPE:       HOME_LOAN_PREQUAL
+LEAD ID:         HML-20260526-6321-1842
+NBA CODE:        HML-RDY-01
+OWNER QUEUE:     JHB_PREMIER_HOME_FINANCE
+SOURCE:          CAMS / ABSA AGENT
+REASON CODES:    RENT_PAY_REG, SAL_STABLE, SAVE_GROWTH, DIG_INTENT
+
+STATUS:          CREATED AND SYNCED TO SALESFORCE`;
+        showToast('Prequalification lead created and synced to Salesforce.');
+        addLog('api.crm.lead.create lead=HML-20260526-6321-1842 source=CAMS status=SUCCESS');
+        addTimeline('CAMS created and synced home loan prequalification lead.');
+      }
+
+      if (command === 'F10') {
+        terminalScreen.textContent = `${initialTerminal}
+
+-------------------------------------------------------------------------------
+ROUTE CONFIRMATION
+-------------------------------------------------------------------------------
+ROUTED TO:       BRANCH CONSULTANT - HOME FINANCE
+BRANCH:          JHB PREMIER
+CASE ID:         SF-CASE-00941842
+SLA:             4 BUSINESS HOURS
+SCRIPT:          HOME_READY_CONSULT_01
+
+STATUS:          SALESFORCE TASK CREATED`;
+        showToast('Branch consultant task created in Salesforce.');
+        addLog('api.salesforce.task.create case=SF-CASE-00941842 owner=BRANCH_HOME_FINANCE status=SUCCESS');
+        addTimeline('Branch consultant task created from CAMS route command.');
+      }
+    }
+
+    document.getElementById('bookAppointment').addEventListener('click', () => {
+      showToast('Appointment booked. Customer receives app confirmation.');
+      addLog('api.appointment.create customer=8001842231 channel=BRANCH status=SUCCESS');
+      addTimeline('Branch appointment booked and confirmation sent to app.');
+    });
+
+    document.getElementById('sendChecklist').addEventListener('click', () => {
+      showToast('Document checklist sent to customer app.');
+      addLog('api.document.checklist.send template=HOME_PREQUAL_DOCS status=SUCCESS');
+      addTimeline('Document checklist sent to customer app.');
+    });
+
+    document.getElementById('createSavings').addEventListener('click', () => {
+      showToast('Transfer-cost savings pocket proposed.');
+      addLog('api.savings.goal.propose goal=TRANSFER_COSTS amount=35000 status=SUCCESS');
+      addTimeline('Transfer-cost savings pocket proposed.');
+    });
+
+    document.getElementById('markAccepted').addEventListener('click', () => {
+      showToast('Outcome captured. Absa Agent learning loop updated.');
+      addLog('agent.outcome.capture outcome=CUSTOMER_INTERESTED next_model_update=QUEUED');
+      addTimeline('Customer marked interested; learning loop updated.');
+    });
+
+    document.getElementById('resetLog').addEventListener('click', () => {
+      eventLog.textContent = initialLog;
+      terminalScreen.textContent = initialTerminal;
+      showToast('Demo log reset.');
+    });
+  </script>
+</body>
+</html>
