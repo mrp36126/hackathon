@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Absa Agent | Digital Hackathon 2026</title>
+  <style>
+    :root {
+      --absa-red: #dd0031;
+      --absa-deep: #7a001b;
+      --ink: #17171a;
+      --muted: #5f6368;
+      --line: #e4e6eb;
+      --paper: #fffaf7;
+      --soft: #f5f6f8;
+      --gold: #f4b942;
+      --green: #15936a;
+      --blue: #1d6fb8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: #111;
+      letter-spacing: 0;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      padding: 56px 70px 54px;
+      background: var(--paper);
+      position: relative;
+    }
+
+    .slide.active {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 22px;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 12px;
+      background: linear-gradient(90deg, var(--absa-red), var(--gold), var(--green), var(--blue));
+    }
+
+    .kicker {
+      color: var(--absa-red);
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 0;
+      line-height: 1.03;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: 76px;
+      max-width: 980px;
+    }
+
+    h2 {
+      font-size: 48px;
+      max-width: 1050px;
+    }
+
+    h3 {
+      margin: 0 0 14px;
+      font-size: 25px;
+    }
+
+    p, li {
+      font-size: 24px;
+      line-height: 1.34;
+    }
+
+    p {
+      max-width: 980px;
+      margin: 0;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 28px;
+    }
+
+    li + li {
+      margin-top: 10px;
+    }
+
+    strong {
+      color: var(--absa-deep);
+    }
+
+    .content {
+      align-self: center;
+      width: 100%;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--absa-red);
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 78% 24%, rgba(244, 185, 66, 0.24), transparent 24%),
+        linear-gradient(135deg, #fffaf7 0%, #fff 52%, #f2f5f8 100%);
+    }
+
+    .hero .content {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-mark {
+      min-height: 420px;
+      border-left: 8px solid var(--absa-red);
+      padding-left: 34px;
+      display: grid;
+      align-content: center;
+      gap: 22px;
+    }
+
+    .hero-mark div {
+      font-size: 30px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 13px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 24px;
+      min-height: 170px;
+    }
+
+    .panel.red {
+      border-top: 7px solid var(--absa-red);
+    }
+
+    .panel.green {
+      border-top: 7px solid var(--green);
+    }
+
+    .panel.blue {
+      border-top: 7px solid var(--blue);
+    }
+
+    .panel.gold {
+      border-top: 7px solid var(--gold);
+    }
+
+    .metric {
+      font-size: 44px;
+      color: var(--absa-red);
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .small {
+      font-size: 19px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .flow .panel {
+      min-height: 260px;
+    }
+
+    .step {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--absa-red);
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      font-size: 22px;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--absa-deep);
+      background: #fff4f4;
+    }
+
+    .phone-crm {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .phone {
+      width: 330px;
+      min-height: 540px;
+      background: #111;
+      border-radius: 34px;
+      padding: 18px;
+      margin: 0 auto;
+      box-shadow: 0 24px 55px rgba(0,0,0,0.18);
+    }
+
+    .screen {
+      min-height: 504px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .app-top {
+      height: 48px;
+      background: var(--absa-red);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-weight: 800;
+    }
+
+    .app-card {
+      border: 1px solid var(--line);
+      padding: 16px;
+      background: #fffaf7;
+    }
+
+    .button {
+      background: var(--absa-red);
+      color: #fff;
+      padding: 12px 14px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .muted-box {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      padding: 14px;
+      font-size: 17px;
+      line-height: 1.3;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #fff4f4;
+      color: var(--absa-deep);
+      border: 1px solid #ffd5d5;
+      padding: 7px 9px;
+      margin: 4px 4px 4px 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .big-quote {
+      font-size: 43px;
+      line-height: 1.16;
+      font-weight: 800;
+      color: var(--absa-deep);
+      max-width: 1080px;
+    }
+
+    .controls {
+      position: fixed;
+      right: 22px;
+      bottom: 18px;
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .controls button {
+      border: 0;
+      background: var(--absa-red);
+      color: #fff;
+      width: 40px;
+      height: 36px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .slide {
+        padding: 38px 24px 42px;
+        overflow-y: auto;
+      }
+
+      .slide.active {
+        display: block;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      h2 {
+        font-size: 32px;
+      }
+
+      p, li, th, td {
+        font-size: 18px;
+      }
+
+      .hero .content,
+      .grid-2,
+      .grid-3,
+      .flow,
+      .phone-crm {
+        grid-template-columns: 1fr;
+      }
+
+      .phone {
+        width: min(330px, 100%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide hero active">
+      <div>
+        <div class="kicker">Digital Hackathon 2026 | Convergence</div>
+      </div>
+      <div class="content">
+        <div>
+          <h1>Absa Agent</h1>
+          <p style="font-size: 33px; margin-top: 18px;">Intelligent banking orchestration for the moments that matter.</p>
+          <div class="pill-row">
+            <span class="pill">Customer Experience</span>
+            <span class="pill">Data + AI</span>
+            <span class="pill">APIs</span>
+            <span class="pill">Human Channels</span>
+            <span class="pill">Commercial Outcomes</span>
+          </div>
+        </div>
+        <div class="hero-mark">
+          <div>Detect intent.</div>
+          <div>Decide next best action.</div>
+          <div>Execute across channels.</div>
+          <div>Learn from outcomes.</div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Absa Agent</span><span>1 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">The Opportunity</div><h2>Banking has the ingredients. Customers need the outcome.</h2></div>
+      <div class="content grid-2">
+        <div class="panel red">
+          <h3>What Absa Already Has</h3>
+          <ul>
+            <li>Mobile and online channels</li>
+            <li>API gateway and microservices</li>
+            <li>Transaction and behavioural data</li>
+            <li>CRM, call centre, and branch systems</li>
+            <li>Product, risk, and affordability services</li>
+          </ul>
+        </div>
+        <div class="panel gold">
+          <h3>The DH26 Opportunity</h3>
+          <p>Connect these capabilities into one intelligent operating model that identifies customer needs and executes the right action at the right moment.</p>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Convergence</span><span>2 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">Problem Statement</div><h2>Customers show intent before they ask for help.</h2></div>
+      <div class="content grid-2">
+        <div>
+          <ul>
+            <li>A tenant is preparing to buy a home.</li>
+            <li>A customer is showing early signs of financial strain.</li>
+            <li>An SME is heading into a cash flow gap.</li>
+            <li>A customer is likely to abandon an application.</li>
+          </ul>
+        </div>
+        <div class="panel red">
+          <h3>Why Current Approaches Fail</h3>
+          <ul>
+            <li>Campaigns are often generic and batch-based.</li>
+            <li>Digital and human channels act separately.</li>
+            <li>Employees do not always see predictive context.</li>
+            <li>Insights do not reliably become executed action.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Customer Pain Point</span><span>3 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">The Solution</div><h2>An autonomous decisioning and orchestration layer.</h2></div>
+      <div class="content flow">
+        <div class="panel red"><div class="step">1</div><h3>Detect</h3><p>Build live context from customer data, behaviours, CRM, and channel signals.</p></div>
+        <div class="panel gold"><div class="step">2</div><h3>Decide</h3><p>Select the next best action using rules, models, policy, consent, and risk guardrails.</p></div>
+        <div class="panel green"><div class="step">3</div><h3>Act</h3><p>Execute through existing APIs into app, CRM, call centre, branch, and messaging channels.</p></div>
+        <div class="panel blue"><div class="step">4</div><h3>Learn</h3><p>Improve decisions using engagement, conversion, satisfaction, complaints, and employee feedback.</p></div>
+      </div>
+      <div class="footer"><span class="brand">Absa Agent</span><span>4 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">DH26 Fit</div><h2>Convergence in one operating model.</h2></div>
+      <div class="content">
+        <table>
+          <tr><th>DH26 Focus Area</th><th>How Absa Agent Delivers</th></tr>
+          <tr><td>Customer experience</td><td>Proactive, contextual, explainable customer journeys.</td></tr>
+          <tr><td>Platform, API and data capability</td><td>Uses existing data, APIs, CRM, mobile, call centre, and product services.</td></tr>
+          <tr><td>Delivery speed and reuse</td><td>Rules-first hackathon build with reusable journey templates.</td></tr>
+          <tr><td>Commercial outcomes</td><td>Measurable uplift in conversion, digital adoption, efficiency, and cost reduction.</td></tr>
+        </table>
+      </div>
+      <div class="footer"><span class="brand">Strategic Alignment</span><span>5 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">AI Agent Design</div><h2>Practical AI, governed by banking controls.</h2></div>
+      <div class="content grid-3">
+        <div class="panel red">
+          <h3>Signals</h3>
+          <p class="small">Salary patterns, rent payments, savings trends, product holdings, digital activity, CRM notes, call reasons, consent, credit and affordability indicators.</p>
+        </div>
+        <div class="panel gold">
+          <h3>Reasoning</h3>
+          <p class="small">Rules for eligibility and compliance. ML scores for propensity and intent. Next-best-action ranking with policy and human escalation guardrails.</p>
+        </div>
+        <div class="panel green">
+          <h3>Explainability</h3>
+          <p class="small">Every action includes trigger signals, reason codes, customer explanation, employee explanation, and an audit log.</p>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">AI That Acts</span><span>6 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">Demo Use Case</div><h2>Emerging Home Buyer: from silent intent to guided action.</h2></div>
+      <div class="content grid-2">
+        <div class="panel red">
+          <h3>Input Signals</h3>
+          <ul>
+            <li>Stable monthly salary</li>
+            <li>Regular rent payments</li>
+            <li>Savings balance increasing</li>
+            <li>Home loan calculator used twice</li>
+            <li>No existing home loan</li>
+            <li>Eligible credit profile</li>
+          </ul>
+        </div>
+        <div class="panel green">
+          <h3>Agent Decision</h3>
+          <p><strong>Intent:</strong> Emerging Home Buyer</p>
+          <p><strong>Confidence:</strong> High</p>
+          <p><strong>Next best action:</strong> Home readiness journey, not a hard sales push.</p>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Demo Scenario</span><span>7 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">Customer + Employee UX</div><h2>One signal, two coordinated experiences.</h2></div>
+      <div class="content phone-crm">
+        <div class="phone">
+          <div class="screen">
+            <div class="app-top">Absa</div>
+            <div class="app-card">
+              <h3>Thinking about buying a home?</h3>
+              <p class="small">Check your home buying readiness in under two minutes.</p>
+            </div>
+            <div class="button">Start readiness check</div>
+            <div class="muted-box"><strong>Why am I seeing this?</strong><br>You used our home loan calculator, make regular rental payments, and your income pattern suggests you may be ready to explore home ownership.</div>
+          </div>
+        </div>
+        <div class="panel blue">
+          <h3>CRM / Call Centre Panel</h3>
+          <p><strong>Customer signal:</strong> Emerging Home Buyer</p>
+          <p><strong>Reason codes:</strong></p>
+          <span class="tag">Rent payments</span>
+          <span class="tag">Stable salary</span>
+          <span class="tag">Calculator usage</span>
+          <span class="tag">Growing savings</span>
+          <p><strong>Recommended action:</strong> Offer prequalification and transfer-cost savings plan.</p>
+          <p><strong>Employee benefit:</strong> Faster, more relevant servicing and sales.</p>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Human-Centred Design</span><span>8 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">Business Value</div><h2>Clear commercial outcomes.</h2></div>
+      <div class="content grid-3">
+        <div class="panel red"><div class="metric">10-20%</div><p>uplift in qualified home loan lead conversion</p></div>
+        <div class="panel gold"><div class="metric">15-25%</div><p>uplift in insurance and savings cross-sell</p></div>
+        <div class="panel green"><div class="metric">20-30%</div><p>reduction in cost-to-serve through proactive digital resolution</p></div>
+        <div class="panel blue"><div class="metric">10-15%</div><p>increase in guided digital journey adoption</p></div>
+        <div class="panel red"><div class="metric">25-40%</div><p>faster lead handling in CRM and call centre</p></div>
+        <div class="panel gold"><div class="metric">5-10%</div><p>reduction in application abandonment</p></div>
+      </div>
+      <div class="footer"><span class="brand">Measurable Outcomes</span><span>9 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">Hackathon Feasibility</div><h2>Hack-ready in days, scalable after.</h2></div>
+      <div class="content grid-2">
+        <div class="panel red">
+          <h3>Build For DH26</h3>
+          <ul>
+            <li>Synthetic customer profiles</li>
+            <li>Small signal library</li>
+            <li>5-10 intent rules</li>
+            <li>Lightweight decision service</li>
+            <li>Mocked Absa APIs</li>
+            <li>Mobile and CRM mock-ups</li>
+          </ul>
+        </div>
+        <div class="panel green">
+          <h3>Demo Proof</h3>
+          <ul>
+            <li>Customer context viewer</li>
+            <li>Agent decision console</li>
+            <li>Mobile app journey</li>
+            <li>CRM insight panel</li>
+            <li>API execution log</li>
+            <li>Outcome feedback loop</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Feasibility</span><span>10 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">Architecture</div><h2>Absa Agent orchestrates platforms. It does not replace them.</h2></div>
+      <div class="content grid-2">
+        <div class="panel red"><h3>Data Layer</h3><p class="small">Customer profile, transactions, product holdings, CRM history, digital behaviour, consent, affordability, outcome data.</p></div>
+        <div class="panel gold"><h3>AI Agent / Decision Layer</h3><p class="small">Context builder, intent detector, rules engine, next-best-action ranker, guardrails, explanation generator, learning module.</p></div>
+        <div class="panel green"><h3>API / Execution Layer</h3><p class="small">API gateway, prequalification, product eligibility, CRM task, notification, appointment, document, and analytics APIs.</p></div>
+        <div class="panel blue"><h3>Channels</h3><p class="small">Absa app, online banking, CRM, call centre, branch, email, SMS, and WhatsApp where permitted.</p></div>
+      </div>
+      <div class="footer"><span class="brand">Enterprise Architecture</span><span>11 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div><div class="kicker">Executive Pitch</div><h2>From banking products to intelligent customer journeys.</h2></div>
+      <div class="content">
+        <p class="big-quote">Absa Agent turns Absa's existing data, APIs, digital channels, and employees into one coordinated decisioning system.</p>
+        <p style="margin-top: 28px;">It detects customer intent before the customer asks, decides the next best action, executes across mobile and human channels, and learns from every outcome.</p>
+        <p style="margin-top: 18px;"><strong>For DH26, we prove it through a home-buyer journey that is practical, measurable, reusable, and buildable on existing platforms.</strong></p>
+      </div>
+      <div class="footer"><span class="brand">Absa Agent</span><span>12 / 12</span></div>
+    </section>
+  </main>
+
+  <div class="controls" aria-label="Slide controls">
+    <button type="button" id="prev" aria-label="Previous slide">&#8592;</button>
+    <button type="button" id="next" aria-label="Next slide">&#8594;</button>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let index = 0;
+
+    function showSlide(nextIndex) {
+      slides[index].classList.remove('active');
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      slides[index].classList.add('active');
+    }
+
+    document.getElementById('prev').addEventListener('click', () => showSlide(index - 1));
+    document.getElementById('next').addEventListener('click', () => showSlide(index + 1));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') showSlide(index + 1);
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') showSlide(index - 1);
+      if (event.key === 'Home') showSlide(0);
+      if (event.key === 'End') showSlide(slides.length - 1);
+    });
+  </script>
+</body>
+</html>
