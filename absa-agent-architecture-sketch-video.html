@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Absa Agent | Slide 15 Sketch Video</title>
+  <style>
+    :root {
+      --absa-red: #dd0031;
+      --absa-deep: #7a001b;
+      --ink: #17171a;
+      --muted: #616872;
+      --paper: #fffdf8;
+      --line: #d8dde6;
+      --gold: #f1b638;
+      --green: #11835d;
+      --blue: #206fb7;
+      --shadow: 0 24px 70px rgba(33, 24, 27, 0.16);
+      --duration: 24s;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(221,0,49,0.08), rgba(32,111,183,0.08) 52%, rgba(17,131,93,0.10)),
+        #f2f4f7;
+      letter-spacing: 0;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 250px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      background: var(--absa-red);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.05;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .control-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      min-width: 92px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .control-btn.primary {
+      background: var(--absa-red);
+      border-color: var(--absa-red);
+      color: #fff;
+    }
+
+    .status {
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .main {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .video-frame {
+      position: relative;
+      width: min(1240px, 100%);
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      background:
+        linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px),
+        var(--paper);
+      background-size: 34px 34px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .video-frame::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 2px solid rgba(23,23,26,0.08);
+      pointer-events: none;
+    }
+
+    .title {
+      position: absolute;
+      left: 54px;
+      top: 34px;
+      z-index: 4;
+    }
+
+    .kicker {
+      color: var(--absa-red);
+      font-size: clamp(12px, 1vw, 16px);
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .title h2 {
+      margin: 8px 0 0;
+      max-width: 720px;
+      font-size: clamp(28px, 4vw, 58px);
+      line-height: 1.02;
+    }
+
+    .subtitle {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 34px;
+      min-height: 64px;
+      z-index: 8;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      border-left: 7px solid var(--absa-red);
+      padding: 14px 18px;
+      display: grid;
+      align-content: center;
+      color: var(--ink);
+      font-size: clamp(15px, 1.75vw, 24px);
+      font-weight: 800;
+      line-height: 1.22;
+    }
+
+    .caption {
+      display: none;
+    }
+
+    .caption.active {
+      display: block;
+    }
+
+    .sketch {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+    }
+
+    .draw-path {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1400;
+      stroke-dashoffset: 1400;
+      animation-name: drawPath;
+      animation-duration: 1.5s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease;
+    }
+
+    .arrow {
+      stroke-width: 5;
+      stroke-dasharray: 900;
+      stroke-dashoffset: 900;
+      animation-name: drawPath;
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease;
+    }
+
+    .accent-red {
+      stroke: var(--absa-red);
+    }
+
+    .accent-gold {
+      stroke: var(--gold);
+    }
+
+    .accent-green {
+      stroke: var(--green);
+    }
+
+    .accent-blue {
+      stroke: var(--blue);
+    }
+
+    .box-data {
+      animation-delay: 2.1s;
+    }
+
+    .box-agent {
+      animation-delay: 6.3s;
+    }
+
+    .box-api {
+      animation-delay: 11.1s;
+    }
+
+    .box-channel {
+      animation-delay: 15.5s;
+    }
+
+    .arrow-one {
+      animation-delay: 5.4s;
+    }
+
+    .arrow-two {
+      animation-delay: 10.2s;
+    }
+
+    .arrow-three {
+      animation-delay: 14.6s;
+    }
+
+    .feedback-arrow {
+      animation-delay: 19.4s;
+      stroke-dasharray: 1500;
+      stroke-dashoffset: 1500;
+    }
+
+    .label {
+      position: absolute;
+      z-index: 5;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.65s ease forwards;
+    }
+
+    .label h3 {
+      margin: 0;
+      font-size: clamp(19px, 2.2vw, 32px);
+      line-height: 1.05;
+    }
+
+    .label p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: clamp(12px, 1.15vw, 16px);
+      line-height: 1.32;
+    }
+
+    .data-label {
+      left: 78px;
+      top: 210px;
+      width: 245px;
+      animation-delay: 2.75s;
+    }
+
+    .agent-label {
+      left: 382px;
+      top: 203px;
+      width: 280px;
+      animation-delay: 6.95s;
+    }
+
+    .api-label {
+      left: 720px;
+      top: 210px;
+      width: 245px;
+      animation-delay: 11.75s;
+    }
+
+    .channel-label {
+      left: 960px;
+      top: 210px;
+      width: 230px;
+      animation-delay: 16.15s;
+    }
+
+    .chips {
+      position: absolute;
+      z-index: 5;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.65s ease forwards;
+    }
+
+    .chip {
+      background: #fff;
+      border: 2px solid rgba(23,23,26,0.14);
+      padding: 7px 9px;
+      font-size: clamp(11px, 0.95vw, 13px);
+      font-weight: 800;
+      box-shadow: 3px 3px 0 rgba(23,23,26,0.08);
+    }
+
+    .data-chips {
+      left: 76px;
+      top: 352px;
+      width: 250px;
+      animation-delay: 3.55s;
+    }
+
+    .agent-chips {
+      left: 382px;
+      top: 350px;
+      width: 284px;
+      animation-delay: 7.75s;
+    }
+
+    .api-chips {
+      left: 720px;
+      top: 352px;
+      width: 250px;
+      animation-delay: 12.55s;
+    }
+
+    .channel-chips {
+      left: 960px;
+      top: 352px;
+      width: 230px;
+      animation-delay: 16.95s;
+    }
+
+    .marker {
+      position: absolute;
+      z-index: 7;
+      width: 68px;
+      height: 18px;
+      border-radius: 2px;
+      background: var(--ink);
+      box-shadow: 0 7px 0 rgba(23,23,26,0.12);
+      transform: rotate(-14deg);
+      opacity: 0;
+      animation: markerMove var(--duration) linear forwards;
+    }
+
+    .marker::before {
+      content: "";
+      position: absolute;
+      left: -16px;
+      top: 2px;
+      width: 18px;
+      height: 14px;
+      background: var(--absa-red);
+      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    }
+
+    .pulse {
+      position: absolute;
+      z-index: 6;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--absa-red);
+      box-shadow: 0 0 0 10px rgba(221,0,49,0.13);
+      opacity: 0;
+      animation: packetRun 10s linear 5.5s infinite;
+    }
+
+    .pulse.second {
+      animation-delay: 7s;
+    }
+
+    .pulse.third {
+      animation-delay: 8.5s;
+    }
+
+    .note {
+      position: absolute;
+      right: 56px;
+      top: 84px;
+      z-index: 6;
+      width: 265px;
+      background: #fff8d6;
+      border: 2px solid rgba(23,23,26,0.16);
+      box-shadow: 8px 8px 0 rgba(23,23,26,0.08);
+      padding: 15px;
+      opacity: 0;
+      transform: rotate(2deg) translateY(12px);
+      animation: fadeUp 0.65s ease 20.3s forwards;
+    }
+
+    .note strong {
+      display: block;
+      color: var(--absa-deep);
+      font-size: 17px;
+      margin-bottom: 7px;
+    }
+
+    .note span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .timeline {
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 14px 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .track {
+      height: 10px;
+      background: #e5eaf1;
+      overflow: hidden;
+    }
+
+    .track::before {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--absa-red);
+      animation: progress var(--duration) linear forwards;
+    }
+
+    .track-labels {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    body.paused * {
+      animation-play-state: paused !important;
+    }
+
+    body.replay * {
+      animation: none !important;
+    }
+
+    @keyframes drawPath {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes progress {
+      to {
+        width: 100%;
+      }
+    }
+
+    @keyframes markerMove {
+      0%, 6% {
+        opacity: 0;
+        left: 38px;
+        top: 118px;
+      }
+      9%, 22% {
+        opacity: 1;
+        left: 292px;
+        top: 258px;
+      }
+      28%, 43% {
+        left: 628px;
+        top: 258px;
+      }
+      48%, 63% {
+        left: 934px;
+        top: 258px;
+      }
+      69%, 82% {
+        left: 1166px;
+        top: 258px;
+      }
+      86%, 100% {
+        opacity: 0;
+        left: 1166px;
+        top: 258px;
+      }
+    }
+
+    @keyframes packetRun {
+      0% {
+        opacity: 0;
+        left: 318px;
+        top: 305px;
+        background: var(--absa-red);
+      }
+      8%, 22% {
+        opacity: 1;
+        left: 365px;
+        top: 305px;
+        background: var(--gold);
+        box-shadow: 0 0 0 10px rgba(241,182,56,0.14);
+      }
+      38%, 52% {
+        left: 700px;
+        top: 305px;
+        background: var(--green);
+        box-shadow: 0 0 0 10px rgba(17,131,93,0.13);
+      }
+      68%, 84% {
+        left: 948px;
+        top: 305px;
+        background: var(--blue);
+        box-shadow: 0 0 0 10px rgba(32,111,183,0.13);
+      }
+      100% {
+        opacity: 0;
+        left: 1164px;
+        top: 305px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .topbar {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .main {
+        padding: 14px;
+      }
+
+      .video-frame {
+        aspect-ratio: 10 / 13;
+      }
+
+      .title {
+        left: 24px;
+        top: 24px;
+      }
+
+      .subtitle {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+      }
+
+      .sketch,
+      .marker,
+      .pulse {
+        display: none;
+      }
+
+      .label,
+      .chips,
+      .note {
+        position: static;
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+
+      .video-frame {
+        display: grid;
+        gap: 10px;
+        padding: 150px 20px 130px;
+        overflow-y: auto;
+      }
+
+      .label,
+      .chips {
+        width: auto;
+      }
+
+      .chip {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">A</div>
+        <div>
+          <h1>Absa Agent</h1>
+          <span>Slide 15 sketch video</span>
+        </div>
+      </div>
+
+      <nav class="controls" aria-label="Video controls">
+        <button class="control-btn primary" type="button" id="playPause">Pause</button>
+        <button class="control-btn" type="button" id="restart">Restart</button>
+      </nav>
+
+      <div class="status" id="status">Playing whiteboard sketch</div>
+    </header>
+
+    <main class="main">
+      <section class="video-frame" id="videoFrame" aria-label="Sketch video for Slide 15 technical architecture">
+        <div class="title">
+          <div class="kicker">Slide 15: Technical Architecture</div>
+          <h2>Absa Agent orchestrates platforms. It does not replace them.</h2>
+        </div>
+
+        <svg class="sketch" viewBox="0 0 1240 697" role="img" aria-label="Whiteboard drawing of four architecture layers">
+          <path class="draw-path accent-red box-data" d="M58 188 C76 174, 300 174, 326 189 C337 216, 338 424, 320 440 C268 452, 97 449, 58 436 C43 388, 43 222, 58 188 Z"></path>
+          <path class="draw-path accent-gold box-agent" d="M360 181 C405 172, 645 174, 678 189 C692 242, 692 400, 676 439 C625 452, 397 450, 358 437 C343 389, 343 223, 360 181 Z"></path>
+          <path class="draw-path accent-green box-api" d="M698 190 C730 174, 928 173, 970 188 C984 225, 986 404, 968 438 C916 451, 735 451, 698 436 C682 389, 683 221, 698 190 Z"></path>
+          <path class="draw-path accent-blue box-channel" d="M960 190 C1002 174, 1162 176, 1192 188 C1210 231, 1211 399, 1193 438 C1149 451, 1001 450, 960 436 C944 389, 945 224, 960 190 Z"></path>
+
+          <path class="draw-path arrow accent-red arrow-one" d="M328 306 C342 303, 350 303, 360 305 M346 292 L362 305 L346 318"></path>
+          <path class="draw-path arrow accent-green arrow-two" d="M680 306 C690 303, 694 303, 700 305 M686 292 L702 305 L686 318"></path>
+          <path class="draw-path arrow accent-blue arrow-three" d="M970 306 C980 303, 948 303, 960 305 M944 292 L962 305 L944 318"></path>
+          <path class="draw-path arrow accent-blue feedback-arrow" d="M1112 445 C1116 520, 185 526, 184 444 M168 459 L184 441 L202 459"></path>
+        </svg>
+
+        <div class="marker" aria-hidden="true"></div>
+        <div class="pulse" aria-hidden="true"></div>
+        <div class="pulse second" aria-hidden="true"></div>
+        <div class="pulse third" aria-hidden="true"></div>
+
+        <div class="label data-label">
+          <h3>1. Data Layer</h3>
+          <p>Bring customer signals and outcomes together as live context.</p>
+        </div>
+        <div class="chips data-chips">
+          <span class="chip">Customer profile</span>
+          <span class="chip">Transactions</span>
+          <span class="chip">CRM history</span>
+          <span class="chip">Digital behaviour</span>
+          <span class="chip">Consent</span>
+          <span class="chip">Affordability</span>
+        </div>
+
+        <div class="label agent-label">
+          <h3>2. AI Agent / Decision Layer</h3>
+          <p>Understand intent, check rules, rank the next best action, and explain why.</p>
+        </div>
+        <div class="chips agent-chips">
+          <span class="chip">Context builder</span>
+          <span class="chip">Intent detector</span>
+          <span class="chip">Rules engine</span>
+          <span class="chip">Policy guardrails</span>
+          <span class="chip">Explanation</span>
+          <span class="chip">Learning module</span>
+        </div>
+
+        <div class="label api-label">
+          <h3>3. API / Execution Layer</h3>
+          <p>Turn the decision into real work through existing Absa services.</p>
+        </div>
+        <div class="chips api-chips">
+          <span class="chip">API gateway</span>
+          <span class="chip">Prequalification</span>
+          <span class="chip">CRM task</span>
+          <span class="chip">Notification</span>
+          <span class="chip">Appointment</span>
+          <span class="chip">Analytics</span>
+        </div>
+
+        <div class="label channel-label">
+          <h3>4. Channels</h3>
+          <p>Deliver the action to customers and employees where they already work.</p>
+        </div>
+        <div class="chips channel-chips">
+          <span class="chip">Absa app</span>
+          <span class="chip">Online banking</span>
+          <span class="chip">CRM</span>
+          <span class="chip">Call centre</span>
+          <span class="chip">Branch</span>
+          <span class="chip">SMS / WhatsApp</span>
+        </div>
+
+        <div class="note">
+          <strong>The punchline</strong>
+          <span>The architecture connects what Absa already has, so journeys can be smarter without replacing core platforms.</span>
+        </div>
+
+        <div class="subtitle" aria-live="polite">
+          <span class="caption active" data-start="0">Slide 15 shows a practical enterprise architecture for Absa Agent.</span>
+          <span class="caption" data-start="3">First, existing data becomes a live customer context.</span>
+          <span class="caption" data-start="7">Then the AI Agent decides the next best action with rules, guardrails, and explainability.</span>
+          <span class="caption" data-start="12">Next, APIs turn that decision into execution across Absa services.</span>
+          <span class="caption" data-start="16">Finally, channels deliver the experience to customers and employees.</span>
+          <span class="caption" data-start="20">Outcomes feed back into the data layer, so the next decision gets smarter.</span>
+        </div>
+      </section>
+
+      <section class="timeline" aria-label="Sketch video progress">
+        <div class="track" aria-hidden="true"></div>
+        <div class="track-labels">
+          <span>Data</span>
+          <span>Agent decision</span>
+          <span>API execution</span>
+          <span>Channels + feedback</span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const playPause = document.getElementById("playPause");
+    const restart = document.getElementById("restart");
+    const status = document.getElementById("status");
+    const captions = Array.from(document.querySelectorAll(".caption"));
+    let paused = false;
+    let startedAt = performance.now();
+    let pauseStarted = 0;
+    let pausedTotal = 0;
+    let rafId;
+
+    function setCaption(seconds) {
+      let current = captions[0];
+      captions.forEach((caption) => {
+        if (seconds >= Number(caption.dataset.start)) {
+          current = caption;
+        }
+      });
+      captions.forEach((caption) => caption.classList.toggle("active", caption === current));
+    }
+
+    function tick(now) {
+      if (!paused) {
+        const seconds = Math.min((now - startedAt - pausedTotal) / 1000, 23.9);
+        setCaption(seconds);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function restartAnimation() {
+      document.body.classList.remove("paused");
+      document.body.classList.add("replay");
+      void document.body.offsetWidth;
+      document.body.classList.remove("replay");
+      paused = false;
+      pausedTotal = 0;
+      pauseStarted = 0;
+      startedAt = performance.now();
+      playPause.textContent = "Pause";
+      status.textContent = "Playing whiteboard sketch";
+      setCaption(0);
+    }
+
+    playPause.addEventListener("click", () => {
+      paused = !paused;
+      document.body.classList.toggle("paused", paused);
+      playPause.textContent = paused ? "Play" : "Pause";
+      status.textContent = paused ? "Paused" : "Playing whiteboard sketch";
+      if (paused) {
+        pauseStarted = performance.now();
+      } else {
+        pausedTotal += performance.now() - pauseStarted;
+      }
+    });
+
+    restart.addEventListener("click", restartAnimation);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === " ") {
+        event.preventDefault();
+        playPause.click();
+      }
+      if (event.key.toLowerCase() === "r") {
+        restartAnimation();
+      }
+    });
+
+    rafId = requestAnimationFrame(tick);
+  </script>
+</body>
+</html>
