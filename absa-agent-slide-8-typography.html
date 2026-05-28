@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Absa Agent | Slide 8 Typography</title>
+  <style>
+    :root {
+      --red: #dd0031;
+      --deep: #7a001b;
+      --ink: #17171a;
+      --muted: #646b76;
+      --paper: #fffaf7;
+      --surface: #ffffff;
+      --line: #e1e5ec;
+      --gold: #f1b638;
+      --green: #11835d;
+      --blue: #206fb7;
+      --shadow: 0 24px 70px rgba(33, 24, 27, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(221,0,49,0.08), rgba(32,111,183,0.08) 52%, rgba(17,131,93,0.09)),
+        #f2f4f7;
+      letter-spacing: 0;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      align-items: center;
+    }
+
+    .poster {
+      width: min(1320px, 100%);
+      margin: 0 auto;
+      min-height: calc(100vh - 56px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .poster::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 12px;
+      background: linear-gradient(90deg, var(--red), var(--gold), var(--green), var(--blue));
+    }
+
+    .header {
+      padding: 46px 54px 26px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: end;
+      border-bottom: 1px solid rgba(225,229,236,0.78);
+    }
+
+    .kicker {
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 0;
+      max-width: 920px;
+      font-size: clamp(46px, 6.5vw, 92px);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    .slide-number {
+      width: 108px;
+      height: 108px;
+      display: grid;
+      place-items: center;
+      background: var(--red);
+      color: #fff;
+      font-size: 44px;
+      font-weight: 900;
+    }
+
+    .typography-grid {
+      padding: 34px 54px 40px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.95fr 0.95fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .type-panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 470px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .type-panel::before {
+      content: attr(data-word);
+      position: absolute;
+      left: 18px;
+      bottom: -12px;
+      color: rgba(23, 23, 26, 0.035);
+      font-size: 110px;
+      line-height: 0.85;
+      font-weight: 900;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .panel-head {
+      padding: 24px 24px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-index {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--red);
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .reasoning .panel-index {
+      background: var(--gold);
+      color: #231a08;
+    }
+
+    .explain .panel-index {
+      background: var(--green);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(35px, 4vw, 58px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .panel-head p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.38;
+      max-width: 360px;
+    }
+
+    .word-list {
+      padding: 22px 24px 26px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-content: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .word {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 10px 12px;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .word.big {
+      font-size: 23px;
+      color: var(--deep);
+      border-color: #ffcbd5;
+      background: #fff4f6;
+    }
+
+    .word.gold {
+      border-color: #f6d47a;
+      background: #fff9e8;
+      color: #5c4005;
+    }
+
+    .word.green {
+      border-color: #c4ead8;
+      background: #f4fff9;
+      color: #08764d;
+    }
+
+    .footer {
+      padding: 20px 54px 26px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      border-top: 1px solid rgba(225,229,236,0.78);
+      background: rgba(255,255,255,0.66);
+    }
+
+    .statement {
+      font-size: clamp(22px, 2.3vw, 34px);
+      line-height: 1.12;
+      font-weight: 900;
+      color: var(--deep);
+    }
+
+    .note {
+      max-width: 310px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.38;
+      font-weight: 700;
+    }
+
+    @media (max-width: 980px) {
+      .header,
+      .footer {
+        grid-template-columns: 1fr;
+      }
+
+      .typography-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .type-panel {
+        min-height: 360px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 12px;
+      }
+
+      .poster {
+        min-height: calc(100vh - 24px);
+      }
+
+      .header,
+      .typography-grid,
+      .footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .slide-number {
+        width: 74px;
+        height: 74px;
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="poster" aria-label="Slide 8 typography layout">
+      <header class="header">
+        <div>
+          <div class="kicker">Slide 8 | AI Agent Design</div>
+          <h1>Practical AI, Governed By Banking Controls</h1>
+        </div>
+        <div class="slide-number">08</div>
+      </header>
+
+      <section class="typography-grid">
+        <article class="type-panel signals" data-word="Signals">
+          <div class="panel-head">
+            <div class="panel-index">01</div>
+            <h2>Signals</h2>
+            <p>The agent listens for patterns across data, behaviour, service events, consent, and affordability.</p>
+          </div>
+          <div class="word-list">
+            <span class="word big">Salary patterns</span>
+            <span class="word">Income</span>
+            <span class="word">Rent</span>
+            <span class="word">Debit orders</span>
+            <span class="word big">Savings trends</span>
+            <span class="word">Balance</span>
+            <span class="word">Calculator usage</span>
+            <span class="word">Product holdings</span>
+            <span class="word">CRM notes</span>
+            <span class="word">Call reasons</span>
+            <span class="word">Application status</span>
+            <span class="word big">Consent</span>
+            <span class="word">Channel preferences</span>
+            <span class="word">Credit indicators</span>
+            <span class="word">Affordability</span>
+            <span class="word">Complaints</span>
+          </div>
+        </article>
+
+        <article class="type-panel reasoning" data-word="Reasoning">
+          <div class="panel-head">
+            <div class="panel-index">02</div>
+            <h2>Reasoning</h2>
+            <p>Signals become a ranked, policy-aware next best action.</p>
+          </div>
+          <div class="word-list">
+            <span class="word gold big">Eligibility rules</span>
+            <span class="word gold">Consent</span>
+            <span class="word gold">Risk</span>
+            <span class="word gold">Compliance</span>
+            <span class="word gold big">ML scores</span>
+            <span class="word gold">Propensity</span>
+            <span class="word gold">Intent</span>
+            <span class="word gold">Churn</span>
+            <span class="word gold">Response likelihood</span>
+            <span class="word gold big">Next-best-action ranking</span>
+            <span class="word gold">Policy guardrails</span>
+            <span class="word gold">Human escalation</span>
+          </div>
+        </article>
+
+        <article class="type-panel explain" data-word="Explain">
+          <div class="panel-head">
+            <div class="panel-index">03</div>
+            <h2>Explainability</h2>
+            <p>Every action can show what triggered it, why it was chosen, and how it was recorded.</p>
+          </div>
+          <div class="word-list">
+            <span class="word green big">Trigger signals</span>
+            <span class="word green">Decision reason</span>
+            <span class="word green big">Recommended action</span>
+            <span class="word green">Customer explanation</span>
+            <span class="word green">Employee explanation</span>
+            <span class="word green big">Audit log</span>
+          </div>
+        </article>
+      </section>
+
+      <footer class="footer">
+        <div class="statement">Trusted AI is not just smart. It is consent-aware, explainable, and governed.</div>
+        <div class="note">Use this slide when you want the audience to remember the design ingredients: what the agent sees, how it reasons, and how it explains.</div>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
