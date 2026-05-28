@@ -3,20 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Absa Agent | Slide 15 Sketch Video</title>
+  <title>Technical Architecture | Hand-Drawn Explainer</title>
   <style>
     :root {
-      --absa-red: #dd0031;
-      --absa-deep: #7a001b;
       --ink: #17171a;
-      --muted: #616872;
+      --muted: #636a75;
       --paper: #fffdf8;
-      --line: #d8dde6;
-      --gold: #f1b638;
+      --line: #d9dee7;
+      --blue: #246fb7;
       --green: #11835d;
-      --blue: #206fb7;
-      --shadow: 0 24px 70px rgba(33, 24, 27, 0.16);
-      --duration: 24s;
+      --gold: #d99712;
+      --red: #d72f45;
+      --shadow: 0 24px 70px rgba(30, 30, 34, 0.14);
+      --duration: 26s;
     }
 
     * {
@@ -28,9 +27,7 @@
       min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
       color: var(--ink);
-      background:
-        linear-gradient(135deg, rgba(221,0,49,0.08), rgba(32,111,183,0.08) 52%, rgba(17,131,93,0.10)),
-        #f2f4f7;
+      background: linear-gradient(135deg, #eef2f6, #f8f5ef);
       letter-spacing: 0;
     }
 
@@ -47,38 +44,20 @@
     .topbar {
       background: #fff;
       border-bottom: 1px solid var(--line);
-      padding: 16px 24px;
+      padding: 14px 22px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
+      gap: 16px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      min-width: 250px;
-    }
-
-    .logo {
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      background: var(--absa-red);
-      color: #fff;
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .brand h1 {
+    .title-block h1 {
       margin: 0;
-      font-size: 23px;
-      line-height: 1.05;
+      font-size: 22px;
+      line-height: 1.1;
     }
 
-    .brand span {
+    .title-block span {
       display: block;
       margin-top: 3px;
       color: var(--muted);
@@ -104,8 +83,8 @@
     }
 
     .control-btn.primary {
-      background: var(--absa-red);
-      border-color: var(--absa-red);
+      background: var(--ink);
+      border-color: var(--ink);
       color: #fff;
     }
 
@@ -117,73 +96,146 @@
     }
 
     .main {
-      padding: 24px;
+      padding: 22px;
       display: grid;
-      gap: 18px;
+      gap: 14px;
       align-content: start;
     }
 
-    .video-frame {
-      position: relative;
-      width: min(1240px, 100%);
-      aspect-ratio: 16 / 9;
+    .video-shell {
+      width: min(1280px, 100%);
       margin: 0 auto;
-      background:
-        linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px),
-        var(--paper);
-      background-size: 34px 34px;
+      background: var(--paper);
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
+      position: relative;
       overflow: hidden;
     }
 
-    .video-frame::before {
+    .video-shell::before {
       content: "";
       position: absolute;
-      inset: 14px;
-      border: 2px solid rgba(23,23,26,0.08);
+      inset: 0;
+      background:
+        linear-gradient(rgba(60, 70, 84, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(60, 70, 84, 0.045) 1px, transparent 1px);
+      background-size: 34px 34px;
       pointer-events: none;
     }
 
-    .title {
-      position: absolute;
-      left: 54px;
-      top: 34px;
-      z-index: 4;
+    .whiteboard {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      z-index: 1;
     }
 
-    .kicker {
-      color: var(--absa-red);
-      font-size: clamp(12px, 1vw, 16px);
+    .draw {
+      fill: rgba(255, 255, 255, 0.68);
+      stroke: var(--ink);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1800;
+      stroke-dashoffset: 1800;
+      animation: draw 1.2s ease forwards;
+    }
+
+    .rough {
+      fill: none;
+      stroke: rgba(23, 23, 26, 0.35);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1800;
+      stroke-dashoffset: 1800;
+      animation: draw 1.2s ease forwards;
+    }
+
+    .arrow {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 900;
+      stroke-dashoffset: 900;
+      animation: draw 0.85s ease forwards;
+    }
+
+    .data-stroke {
+      stroke: var(--blue);
+    }
+
+    .agent-stroke {
+      stroke: var(--gold);
+    }
+
+    .api-stroke {
+      stroke: var(--green);
+    }
+
+    .channel-stroke {
+      stroke: var(--red);
+    }
+
+    .fade {
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .hand-title {
+      font-size: 42px;
       font-weight: 900;
-      text-transform: uppercase;
+      fill: var(--ink);
     }
 
-    .title h2 {
-      margin: 8px 0 0;
-      max-width: 780px;
-      font-size: clamp(28px, 3.1vw, 46px);
-      line-height: 1.05;
+    .hand-subtitle {
+      font-size: 20px;
+      font-weight: 700;
+      fill: var(--muted);
     }
 
-    .subtitle {
-      position: absolute;
-      left: 56px;
-      right: 56px;
-      bottom: 34px;
-      min-height: 64px;
-      z-index: 8;
-      background: rgba(255,255,255,0.92);
+    .box-title {
+      font-size: 27px;
+      font-weight: 900;
+      fill: var(--ink);
+    }
+
+    .box-copy {
+      font-size: 17px;
+      font-weight: 700;
+      fill: var(--muted);
+    }
+
+    .chip-text {
+      font-size: 14px;
+      font-weight: 900;
+      fill: var(--ink);
+    }
+
+    .small-note {
+      font-size: 18px;
+      font-weight: 900;
+      fill: var(--ink);
+    }
+
+    .caption-box {
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      background: #fff;
       border: 1px solid var(--line);
-      border-left: 7px solid var(--absa-red);
-      padding: 14px 18px;
+      border-left: 7px solid var(--ink);
+      box-shadow: var(--shadow);
+      min-height: 76px;
+      padding: 16px 20px;
       display: grid;
       align-content: center;
-      color: var(--ink);
-      font-size: clamp(15px, 1.75vw, 24px);
-      font-weight: 800;
-      line-height: 1.22;
+      font-size: clamp(18px, 2vw, 27px);
+      line-height: 1.2;
+      font-weight: 900;
     }
 
     .caption {
@@ -194,289 +246,120 @@
       display: block;
     }
 
-    .sketch {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-    }
-
-    .draw-path {
-      fill: none;
-      stroke: var(--ink);
-      stroke-width: 4;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 1400;
-      stroke-dashoffset: 1400;
-      animation-name: drawPath;
-      animation-duration: 1.5s;
-      animation-fill-mode: forwards;
-      animation-timing-function: ease;
-    }
-
-    .arrow {
-      stroke-width: 5;
-      stroke-dasharray: 900;
-      stroke-dashoffset: 900;
-      animation-name: drawPath;
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-      animation-timing-function: ease;
-    }
-
-    .accent-red {
-      stroke: var(--absa-red);
-    }
-
-    .accent-gold {
-      stroke: var(--gold);
-    }
-
-    .accent-green {
-      stroke: var(--green);
-    }
-
-    .accent-blue {
-      stroke: var(--blue);
-    }
-
-    .box-data {
-      animation-delay: 2.1s;
-    }
-
-    .box-agent {
-      animation-delay: 6.3s;
-    }
-
-    .box-api {
-      animation-delay: 11.1s;
-    }
-
-    .box-channel {
-      animation-delay: 15.5s;
-    }
-
-    .arrow-one {
-      animation-delay: 5.4s;
-    }
-
-    .arrow-two {
-      animation-delay: 10.2s;
-    }
-
-    .arrow-three {
-      animation-delay: 14.6s;
-    }
-
-    .feedback-arrow {
-      animation-delay: 19.4s;
-      stroke-dasharray: 1500;
-      stroke-dashoffset: 1500;
-    }
-
-    .label {
-      position: absolute;
-      z-index: 5;
-      opacity: 0;
-      transform: translateY(12px);
-      animation: fadeUp 0.65s ease forwards;
-    }
-
-    .label h3 {
-      margin: 0;
-      font-size: clamp(19px, 2.2vw, 32px);
-      line-height: 1.05;
-    }
-
-    .label p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: clamp(12px, 1.15vw, 16px);
-      line-height: 1.32;
-    }
-
-    .data-label {
-      left: 78px;
-      top: 286px;
-      width: 245px;
-      animation-delay: 2.75s;
-    }
-
-    .agent-label {
-      left: 382px;
-      top: 280px;
-      width: 280px;
-      animation-delay: 6.95s;
-    }
-
-    .api-label {
-      left: 720px;
-      top: 286px;
-      width: 245px;
-      animation-delay: 11.75s;
-    }
-
-    .channel-label {
-      left: 960px;
-      top: 286px;
-      width: 230px;
-      animation-delay: 16.15s;
-    }
-
-    .chips {
-      position: absolute;
-      z-index: 5;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeUp 0.65s ease forwards;
-    }
-
-    .chip {
-      background: #fff;
-      border: 2px solid rgba(23,23,26,0.14);
-      padding: 7px 9px;
-      font-size: clamp(11px, 0.95vw, 13px);
-      font-weight: 800;
-      box-shadow: 3px 3px 0 rgba(23,23,26,0.08);
-    }
-
-    .data-chips {
-      left: 76px;
-      top: 432px;
-      width: 250px;
-      animation-delay: 3.55s;
-    }
-
-    .agent-chips {
-      left: 382px;
-      top: 430px;
-      width: 284px;
-      animation-delay: 7.75s;
-    }
-
-    .api-chips {
-      left: 720px;
-      top: 432px;
-      width: 250px;
-      animation-delay: 12.55s;
-    }
-
-    .channel-chips {
-      left: 960px;
-      top: 432px;
-      width: 230px;
-      animation-delay: 16.95s;
-    }
-
-    .marker {
-      position: absolute;
-      z-index: 7;
-      width: 68px;
-      height: 18px;
-      border-radius: 2px;
-      background: var(--ink);
-      box-shadow: 0 7px 0 rgba(23,23,26,0.12);
-      transform: rotate(-14deg);
-      opacity: 0;
-      animation: markerMove var(--duration) linear forwards;
-    }
-
-    .marker::before {
-      content: "";
-      position: absolute;
-      left: -16px;
-      top: 2px;
-      width: 18px;
-      height: 14px;
-      background: var(--absa-red);
-      clip-path: polygon(100% 0, 0 50%, 100% 100%);
-    }
-
-    .pulse {
-      position: absolute;
-      z-index: 6;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--absa-red);
-      box-shadow: 0 0 0 10px rgba(221,0,49,0.13);
-      opacity: 0;
-      animation: packetRun 10s linear 5.5s infinite;
-    }
-
-    .pulse.second {
-      animation-delay: 7s;
-    }
-
-    .pulse.third {
-      animation-delay: 8.5s;
-    }
-
-    .note {
-      position: absolute;
-      right: 56px;
-      top: 104px;
-      z-index: 6;
-      width: 265px;
-      background: #fff8d6;
-      border: 2px solid rgba(23,23,26,0.16);
-      box-shadow: 8px 8px 0 rgba(23,23,26,0.08);
-      padding: 15px;
-      opacity: 0;
-      transform: rotate(2deg) translateY(12px);
-      animation: fadeUp 0.65s ease 20.3s forwards;
-    }
-
-    .note strong {
-      display: block;
-      color: var(--absa-deep);
-      font-size: 17px;
-      margin-bottom: 7px;
-    }
-
-    .note span {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
     .timeline {
-      width: min(1240px, 100%);
+      width: min(1280px, 100%);
       margin: 0 auto;
       background: #fff;
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
-      padding: 14px 18px;
+      padding: 12px 16px;
       display: grid;
-      gap: 10px;
+      gap: 9px;
     }
 
     .track {
       height: 10px;
-      background: #e5eaf1;
+      background: #e6ebf2;
       overflow: hidden;
     }
 
     .track::before {
       content: "";
       display: block;
-      height: 100%;
       width: 0;
-      background: var(--absa-red);
+      height: 100%;
+      background: var(--ink);
       animation: progress var(--duration) linear forwards;
     }
 
     .track-labels {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
       color: var(--muted);
       font-size: 12px;
       font-weight: 800;
       text-align: center;
+    }
+
+    .marker {
+      transform-origin: center;
+      opacity: 0;
+      animation: marker 25s linear forwards;
+    }
+
+    .marker-body {
+      fill: var(--ink);
+    }
+
+    .marker-tip {
+      fill: var(--red);
+    }
+
+    .packet {
+      opacity: 0;
+      animation: packet 9s linear 8.2s infinite;
+    }
+
+    .packet.two {
+      animation-delay: 9.4s;
+    }
+
+    .packet.three {
+      animation-delay: 10.6s;
+    }
+
+    .packet circle {
+      fill: var(--blue);
+    }
+
+    .packet .ring {
+      fill: none;
+      stroke: rgba(36, 111, 183, 0.22);
+      stroke-width: 10;
+    }
+
+    .delay-title {
+      animation-delay: 0.4s;
+    }
+
+    .delay-data {
+      animation-delay: 2.2s;
+    }
+
+    .delay-data-text {
+      animation-delay: 3s;
+    }
+
+    .delay-agent {
+      animation-delay: 6.2s;
+    }
+
+    .delay-agent-text {
+      animation-delay: 7s;
+    }
+
+    .delay-api {
+      animation-delay: 11s;
+    }
+
+    .delay-api-text {
+      animation-delay: 11.8s;
+    }
+
+    .delay-channels {
+      animation-delay: 15s;
+    }
+
+    .delay-channels-text {
+      animation-delay: 15.8s;
+    }
+
+    .delay-feedback {
+      animation-delay: 20s;
+    }
+
+    .delay-feedback-text {
+      animation-delay: 21s;
     }
 
     body.paused * {
@@ -487,16 +370,15 @@
       animation: none !important;
     }
 
-    @keyframes drawPath {
+    @keyframes draw {
       to {
         stroke-dashoffset: 0;
       }
     }
 
-    @keyframes fadeUp {
+    @keyframes fadeIn {
       to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
@@ -506,123 +388,67 @@
       }
     }
 
-    @keyframes markerMove {
-      0%, 6% {
+    @keyframes marker {
+      0%, 5% {
         opacity: 0;
-        left: 38px;
-        top: 196px;
+        transform: translate(70px, 92px) rotate(-16deg);
       }
-      9%, 22% {
+      9%, 21% {
         opacity: 1;
-        left: 292px;
-        top: 336px;
+        transform: translate(302px, 208px) rotate(-12deg);
       }
-      28%, 43% {
-        left: 628px;
-        top: 336px;
+      27%, 42% {
+        transform: translate(302px, 370px) rotate(-12deg);
       }
-      48%, 63% {
-        left: 934px;
-        top: 336px;
+      48%, 62% {
+        transform: translate(302px, 532px) rotate(-12deg);
       }
-      69%, 82% {
-        left: 1166px;
-        top: 336px;
+      67%, 82% {
+        transform: translate(892px, 532px) rotate(-12deg);
       }
-      86%, 100% {
+      88%, 100% {
         opacity: 0;
-        left: 1166px;
-        top: 336px;
+        transform: translate(1060px, 200px) rotate(-12deg);
       }
     }
 
-    @keyframes packetRun {
+    @keyframes packet {
       0% {
         opacity: 0;
-        left: 318px;
-        top: 383px;
-        background: var(--absa-red);
+        transform: translate(330px, 208px);
       }
-      8%, 22% {
+      12%, 28% {
         opacity: 1;
-        left: 365px;
-        top: 383px;
-        background: var(--gold);
-        box-shadow: 0 0 0 10px rgba(241,182,56,0.14);
+        transform: translate(330px, 292px);
       }
-      38%, 52% {
-        left: 700px;
-        top: 383px;
-        background: var(--green);
-        box-shadow: 0 0 0 10px rgba(17,131,93,0.13);
+      42%, 58% {
+        transform: translate(330px, 454px);
       }
-      68%, 84% {
-        left: 948px;
-        top: 383px;
-        background: var(--blue);
-        box-shadow: 0 0 0 10px rgba(32,111,183,0.13);
+      72%, 88% {
+        transform: translate(550px, 532px);
       }
       100% {
         opacity: 0;
-        left: 1164px;
-        top: 383px;
+        transform: translate(930px, 532px);
       }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 760px) {
       .topbar {
         display: grid;
         grid-template-columns: 1fr;
       }
 
       .main {
-        padding: 14px;
+        padding: 12px;
       }
 
-      .video-frame {
-        aspect-ratio: 10 / 13;
+      .caption-box {
+        font-size: 18px;
       }
 
-      .title {
-        left: 24px;
-        top: 24px;
-      }
-
-      .subtitle {
-        left: 20px;
-        right: 20px;
-        bottom: 20px;
-      }
-
-      .sketch,
-      .marker,
-      .pulse {
-        display: none;
-      }
-
-      .label,
-      .chips,
-      .note {
-        position: static;
-        opacity: 1;
-        transform: none;
-        animation: none;
-      }
-
-      .video-frame {
-        display: grid;
-        gap: 10px;
-        padding: 150px 20px 130px;
-        overflow-y: auto;
-      }
-
-      .label,
-      .chips {
-        width: auto;
-      }
-
-      .chip {
-        font-size: 12px;
+      .track-labels {
+        font-size: 11px;
       }
     }
   </style>
@@ -630,114 +456,118 @@
 <body>
   <div class="page">
     <header class="topbar">
-      <div class="brand">
-        <div class="logo">A</div>
-        <div>
-          <h1>Absa Agent</h1>
-          <span>Slide 15 sketch video</span>
-        </div>
+      <div class="title-block">
+        <h1>Hand-Drawn Explainer Video</h1>
+        <span>Technical architecture: data, agent, APIs, channels, feedback</span>
       </div>
-
       <nav class="controls" aria-label="Video controls">
         <button class="control-btn primary" type="button" id="playPause">Pause</button>
         <button class="control-btn" type="button" id="restart">Restart</button>
       </nav>
-
-      <div class="status" id="status">Playing whiteboard sketch</div>
+      <div class="status" id="status">Playing</div>
     </header>
 
     <main class="main">
-      <section class="video-frame" id="videoFrame" aria-label="Sketch video for Slide 15 technical architecture">
-        <div class="title">
-          <div class="kicker">Slide 15: Technical Architecture</div>
-          <h2>Absa Agent orchestrates platforms. It does not replace them.</h2>
-        </div>
+      <section class="video-shell" aria-label="Hand-drawn technical architecture explainer">
+        <svg class="whiteboard" viewBox="0 0 1280 720" role="img" aria-label="Whiteboard explainer of the technical architecture">
+          <text class="hand-title fade delay-title" x="70" y="68">A simple architecture for an intelligent banking agent</text>
+          <text class="hand-subtitle fade delay-title" x="72" y="102">Four layers work together. Outcomes loop back to improve the next decision.</text>
 
-        <svg class="sketch" viewBox="0 0 1240 697" role="img" aria-label="Whiteboard drawing of four architecture layers">
-          <path class="draw-path accent-red box-data" d="M58 266 C76 252, 300 252, 326 267 C337 294, 338 502, 320 518 C268 530, 97 527, 58 514 C43 466, 43 300, 58 266 Z"></path>
-          <path class="draw-path accent-gold box-agent" d="M360 259 C405 250, 645 252, 678 267 C692 320, 692 478, 676 517 C625 530, 397 528, 358 515 C343 467, 343 301, 360 259 Z"></path>
-          <path class="draw-path accent-green box-api" d="M698 268 C730 252, 928 251, 970 266 C984 303, 986 482, 968 516 C916 529, 735 529, 698 514 C682 467, 683 299, 698 268 Z"></path>
-          <path class="draw-path accent-blue box-channel" d="M960 268 C1002 252, 1162 254, 1192 266 C1210 309, 1211 477, 1193 516 C1149 529, 1001 528, 960 514 C944 467, 945 302, 960 268 Z"></path>
+          <path class="rough data-stroke delay-data" d="M78 145 C122 134, 544 136, 582 148 C596 182, 596 252, 579 281 C514 294, 130 292, 80 278 C62 238, 62 178, 78 145 Z"></path>
+          <path class="draw data-stroke delay-data" d="M82 148 C130 140, 536 142, 578 151 C590 184, 588 250, 574 276 C506 286, 132 286, 84 274 C70 235, 70 180, 82 148 Z"></path>
+          <text class="box-title fade delay-data-text" x="116" y="184">1. Data Layer</text>
+          <text class="box-copy fade delay-data-text" x="116" y="215">Customer signals and outcomes become live context.</text>
+          <g class="fade delay-data-text">
+            <rect x="116" y="234" width="126" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="132" y="256">Profile</text>
+            <rect x="254" y="234" width="140" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="270" y="256">Transactions</text>
+            <rect x="406" y="234" width="126" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="422" y="256">CRM</text>
+          </g>
 
-          <path class="draw-path arrow accent-red arrow-one" d="M328 384 C342 381, 350 381, 360 383 M346 370 L362 383 L346 396"></path>
-          <path class="draw-path arrow accent-green arrow-two" d="M680 384 C690 381, 694 381, 700 383 M686 370 L702 383 L686 396"></path>
-          <path class="draw-path arrow accent-blue arrow-three" d="M970 384 C980 381, 948 381, 960 383 M944 370 L962 383 L944 396"></path>
-          <path class="draw-path arrow accent-blue feedback-arrow" d="M1112 523 C1116 568, 185 574, 184 522 M168 537 L184 519 L202 537"></path>
+          <path class="arrow delay-agent data-stroke" d="M330 286 C330 310, 330 320, 330 334 M312 318 L330 338 L348 318"></path>
+
+          <path class="rough agent-stroke delay-agent" d="M78 306 C122 295, 544 297, 582 309 C596 343, 596 413, 579 442 C514 455, 130 453, 80 439 C62 399, 62 339, 78 306 Z"></path>
+          <path class="draw agent-stroke delay-agent" d="M82 309 C130 301, 536 303, 578 312 C590 345, 588 411, 574 437 C506 447, 132 447, 84 435 C70 396, 70 341, 82 309 Z"></path>
+          <text class="box-title fade delay-agent-text" x="116" y="345">2. AI Agent / Decision Layer</text>
+          <text class="box-copy fade delay-agent-text" x="116" y="376">Build context, detect intent, rank the next best action, and explain why.</text>
+          <g class="fade delay-agent-text">
+            <rect x="116" y="395" width="150" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="132" y="417">Rules engine</text>
+            <rect x="278" y="395" width="134" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="294" y="417">Guardrails</text>
+            <rect x="424" y="395" width="116" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="440" y="417">Learning</text>
+          </g>
+
+          <path class="arrow delay-api agent-stroke" d="M330 447 C330 471, 330 482, 330 496 M312 480 L330 500 L348 480"></path>
+
+          <path class="rough api-stroke delay-api" d="M78 468 C122 457, 544 459, 582 471 C596 505, 596 575, 579 604 C514 617, 130 615, 80 601 C62 561, 62 501, 78 468 Z"></path>
+          <path class="draw api-stroke delay-api" d="M82 471 C130 463, 536 465, 578 474 C590 507, 588 573, 574 599 C506 609, 132 609, 84 597 C70 558, 70 503, 82 471 Z"></path>
+          <text class="box-title fade delay-api-text" x="116" y="507">3. API / Execution Layer</text>
+          <text class="box-copy fade delay-api-text" x="116" y="538">Existing services turn the decision into work.</text>
+          <g class="fade delay-api-text">
+            <rect x="116" y="557" width="132" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="132" y="579">Gateway</text>
+            <rect x="260" y="557" width="138" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="276" y="579">CRM task</text>
+            <rect x="410" y="557" width="150" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="426" y="579">Notification</text>
+          </g>
+
+          <path class="arrow delay-channels api-stroke" d="M584 532 C632 532, 662 532, 704 532 M684 514 L708 532 L684 550"></path>
+
+          <path class="rough channel-stroke delay-channels" d="M706 468 C748 457, 1138 459, 1178 471 C1194 505, 1194 575, 1177 604 C1110 617, 756 615, 708 601 C690 561, 690 501, 706 468 Z"></path>
+          <path class="draw channel-stroke delay-channels" d="M710 471 C756 463, 1130 465, 1174 474 C1188 507, 1186 573, 1172 599 C1104 609, 758 609, 712 597 C698 558, 698 503, 710 471 Z"></path>
+          <text class="box-title fade delay-channels-text" x="744" y="507">4. Channels</text>
+          <text class="box-copy fade delay-channels-text" x="744" y="538">Customers and employees see one coordinated experience.</text>
+          <g class="fade delay-channels-text">
+            <rect x="744" y="557" width="116" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="760" y="579">App</text>
+            <rect x="872" y="557" width="122" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="888" y="579">CRM</text>
+            <rect x="1006" y="557" width="142" height="34" fill="#fff" stroke="#cfd6df" stroke-width="2"></rect>
+            <text class="chip-text" x="1022" y="579">Call centre</text>
+          </g>
+
+          <path class="arrow delay-feedback channel-stroke" d="M930 466 C1116 340, 1132 124, 602 126 C582 150, 582 184, 590 210 M616 191 L586 210 L616 229"></path>
+          <g class="fade delay-feedback-text">
+            <rect x="742" y="176" width="392" height="82" fill="#fff8d6" stroke="#d4c486" stroke-width="2"></rect>
+            <text class="small-note" x="766" y="210">Outcome feedback</text>
+            <text class="box-copy" x="766" y="238">Results flow back, so the next decision improves.</text>
+          </g>
+
+          <g class="packet">
+            <circle class="ring" cx="0" cy="0" r="16"></circle>
+            <circle cx="0" cy="0" r="8"></circle>
+          </g>
+          <g class="packet two">
+            <circle class="ring" cx="0" cy="0" r="16"></circle>
+            <circle cx="0" cy="0" r="8"></circle>
+          </g>
+          <g class="packet three">
+            <circle class="ring" cx="0" cy="0" r="16"></circle>
+            <circle cx="0" cy="0" r="8"></circle>
+          </g>
+
+          <g class="marker">
+            <rect class="marker-body" x="-4" y="-8" width="72" height="18" rx="3"></rect>
+            <path class="marker-tip" d="M-20 -6 L-4 1 L-20 9 Z"></path>
+          </g>
         </svg>
-
-        <div class="marker" aria-hidden="true"></div>
-        <div class="pulse" aria-hidden="true"></div>
-        <div class="pulse second" aria-hidden="true"></div>
-        <div class="pulse third" aria-hidden="true"></div>
-
-        <div class="label data-label">
-          <h3>1. Data Layer</h3>
-          <p>Bring customer signals and outcomes together as live context.</p>
-        </div>
-        <div class="chips data-chips">
-          <span class="chip">Customer profile</span>
-          <span class="chip">Transactions</span>
-          <span class="chip">CRM history</span>
-          <span class="chip">Digital behaviour</span>
-          <span class="chip">Consent</span>
-          <span class="chip">Affordability</span>
-        </div>
-
-        <div class="label agent-label">
-          <h3>2. AI Agent / Decision Layer</h3>
-          <p>Understand intent, check rules, rank the next best action, and explain why.</p>
-        </div>
-        <div class="chips agent-chips">
-          <span class="chip">Context builder</span>
-          <span class="chip">Intent detector</span>
-          <span class="chip">Rules engine</span>
-          <span class="chip">Policy guardrails</span>
-          <span class="chip">Explanation</span>
-          <span class="chip">Learning module</span>
-        </div>
-
-        <div class="label api-label">
-          <h3>3. API / Execution Layer</h3>
-          <p>Turn the decision into real work through existing Absa services.</p>
-        </div>
-        <div class="chips api-chips">
-          <span class="chip">API gateway</span>
-          <span class="chip">Prequalification</span>
-          <span class="chip">CRM task</span>
-          <span class="chip">Notification</span>
-          <span class="chip">Appointment</span>
-          <span class="chip">Analytics</span>
-        </div>
-
-        <div class="label channel-label">
-          <h3>4. Channels</h3>
-          <p>Deliver the action to customers and employees where they already work.</p>
-        </div>
-        <div class="chips channel-chips">
-          <span class="chip">Absa app</span>
-          <span class="chip">Online banking</span>
-          <span class="chip">CRM</span>
-          <span class="chip">Call centre</span>
-          <span class="chip">Branch</span>
-          <span class="chip">SMS / WhatsApp</span>
-        </div>
-
-        <div class="note">
-          <strong>The punchline</strong>
-          <span>The architecture connects what Absa already has, so journeys can be smarter without replacing core platforms.</span>
-        </div>
-
-        <div class="subtitle" aria-live="polite">
-          <span class="caption active" data-start="0">Slide 15 shows a practical enterprise architecture for Absa Agent.</span>
-          <span class="caption" data-start="3">First, existing data becomes a live customer context.</span>
-          <span class="caption" data-start="7">Then the AI Agent decides the next best action with rules, guardrails, and explainability.</span>
-          <span class="caption" data-start="12">Next, APIs turn that decision into execution across Absa services.</span>
-          <span class="caption" data-start="16">Finally, channels deliver the experience to customers and employees.</span>
-          <span class="caption" data-start="20">Outcomes feed back into the data layer, so the next decision gets smarter.</span>
-        </div>
       </section>
 
-      <section class="timeline" aria-label="Sketch video progress">
+      <section class="caption-box" aria-live="polite">
+        <span class="caption active" data-start="0">Here is the architecture in plain English: four layers, one coordinated flow.</span>
+        <span class="caption" data-start="3">First, the data layer brings customer signals together as live context.</span>
+        <span class="caption" data-start="7">Then the AI agent decides the next best action using rules, guardrails, and explainability.</span>
+        <span class="caption" data-start="12">Next, existing APIs turn the decision into real execution.</span>
+        <span class="caption" data-start="16">Then channels deliver the experience to customers and employees.</span>
+        <span class="caption" data-start="21">Finally, outcomes feed back into the data layer so the next decision gets smarter.</span>
+      </section>
+
+      <section class="timeline" aria-label="Video progress">
         <div class="track" aria-hidden="true"></div>
         <div class="track-labels">
           <span>Data</span>
@@ -758,7 +588,6 @@
     let startedAt = performance.now();
     let pauseStarted = 0;
     let pausedTotal = 0;
-    let rafId;
 
     function setCaption(seconds) {
       let current = captions[0];
@@ -772,10 +601,10 @@
 
     function tick(now) {
       if (!paused) {
-        const seconds = Math.min((now - startedAt - pausedTotal) / 1000, 23.9);
+        const seconds = Math.min((now - startedAt - pausedTotal) / 1000, 25.9);
         setCaption(seconds);
       }
-      rafId = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     }
 
     function restartAnimation() {
@@ -788,7 +617,7 @@
       pauseStarted = 0;
       startedAt = performance.now();
       playPause.textContent = "Pause";
-      status.textContent = "Playing whiteboard sketch";
+      status.textContent = "Playing";
       setCaption(0);
     }
 
@@ -796,7 +625,7 @@
       paused = !paused;
       document.body.classList.toggle("paused", paused);
       playPause.textContent = paused ? "Play" : "Pause";
-      status.textContent = paused ? "Paused" : "Playing whiteboard sketch";
+      status.textContent = paused ? "Paused" : "Playing";
       if (paused) {
         pauseStarted = performance.now();
       } else {
@@ -816,7 +645,7 @@
       }
     });
 
-    rafId = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   </script>
 </body>
 </html>
