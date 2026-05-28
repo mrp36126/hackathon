@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Absa Agent | Technical Architecture Flow</title>
+  <style>
+    :root {
+      --absa-red: #dd0031;
+      --absa-deep: #7a001b;
+      --ink: #17171a;
+      --muted: #5f6670;
+      --paper: #fffaf7;
+      --surface: #ffffff;
+      --soft: #f3f5f8;
+      --line: #dfe4ec;
+      --gold: #f1b638;
+      --green: #11835d;
+      --blue: #206fb7;
+      --shadow: 0 22px 58px rgba(33, 24, 27, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(221,0,49,0.08), rgba(32,111,183,0.08) 52%, rgba(17,131,93,0.10)),
+        #f2f4f7;
+      letter-spacing: 0;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 250px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      background: var(--absa-red);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.05;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .layer-btn,
+    .play-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .layer-btn {
+      min-width: 98px;
+      padding: 10px 12px;
+    }
+
+    .layer-btn.active {
+      background: var(--absa-red);
+      border-color: var(--absa-red);
+      color: #fff;
+    }
+
+    .play-btn {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+    }
+
+    .live-status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 7px rgba(17,131,93,0.12);
+    }
+
+    .main {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(280px, 340px) 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .story,
+    .architecture,
+    .message {
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .story {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      min-height: 0;
+    }
+
+    .story-head {
+      padding: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .kicker {
+      color: var(--absa-red);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .story h2 {
+      margin: 8px 0 0;
+      font-size: 35px;
+      line-height: 1.04;
+    }
+
+    .layer-copy {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      min-height: 172px;
+    }
+
+    .layer-copy h3 {
+      margin: 0 0 9px;
+      color: var(--absa-deep);
+      font-size: 27px;
+    }
+
+    .layer-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.43;
+    }
+
+    .plain-list {
+      padding: 20px 24px;
+      display: grid;
+      gap: 11px;
+      align-content: start;
+    }
+
+    .plain-item {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+      opacity: 0.62;
+      transition: opacity 220ms ease, transform 220ms ease, border-color 220ms ease, background 220ms ease;
+    }
+
+    .plain-item.active {
+      opacity: 1;
+      background: #fff4f6;
+      border-color: #ffc8d3;
+      transform: translateX(6px);
+    }
+
+    .plain-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--absa-red);
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .plain-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .plain-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .summary {
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.38;
+    }
+
+    .summary strong {
+      color: var(--ink);
+    }
+
+    .architecture {
+      min-height: 720px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,250,247,0.92)),
+        var(--paper);
+    }
+
+    .arch-head {
+      padding: 24px 28px 18px;
+      border-bottom: 1px solid rgba(223,228,236,0.72);
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .arch-head h2 {
+      margin: 8px 0 0;
+      font-size: 39px;
+      line-height: 1.04;
+      max-width: 850px;
+    }
+
+    .arch-head p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.42;
+      max-width: 900px;
+    }
+
+    .badge {
+      min-width: 178px;
+      border: 1px solid #ffd0d9;
+      background: #fff4f6;
+      color: var(--absa-deep);
+      padding: 14px;
+      text-align: right;
+      font-weight: 900;
+    }
+
+    .badge span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .arch-map {
+      position: relative;
+      padding: 26px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .layer-row {
+      position: relative;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.9);
+      min-height: 118px;
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 16px;
+      align-items: stretch;
+      opacity: 0.58;
+      transition: opacity 240ms ease, transform 240ms ease, border-color 240ms ease;
+    }
+
+    .layer-row.active {
+      opacity: 1;
+      transform: translateX(6px);
+      border-color: #ffc6d1;
+    }
+
+    .layer-label {
+      padding: 20px;
+      color: #fff;
+      background: var(--absa-red);
+      display: grid;
+      align-content: center;
+      gap: 6px;
+    }
+
+    .layer-row[data-layer="agent"] .layer-label {
+      background: var(--gold);
+      color: #231a08;
+    }
+
+    .layer-row[data-layer="api"] .layer-label {
+      background: var(--green);
+    }
+
+    .layer-row[data-layer="channels"] .layer-label {
+      background: var(--blue);
+    }
+
+    .layer-label span {
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .layer-label strong {
+      font-size: 23px;
+      line-height: 1.05;
+    }
+
+    .components {
+      padding: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-content: center;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 10px 12px;
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 10px 22px rgba(20,20,24,0.04);
+    }
+
+    .agent-core {
+      border-color: #f4c44e;
+      background: #fff9e8;
+    }
+
+    .packet {
+      position: absolute;
+      left: 50%;
+      top: 26px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--absa-red);
+      box-shadow: 0 0 0 10px rgba(221,0,49,0.12);
+      transform: translateX(-50%);
+      animation: moveDown 9.6s linear infinite;
+      z-index: 4;
+    }
+
+    .packet.second {
+      animation-delay: 1.6s;
+    }
+
+    .packet.third {
+      animation-delay: 3.2s;
+    }
+
+    .feedback {
+      position: absolute;
+      right: 24px;
+      top: 92px;
+      bottom: 92px;
+      width: 58px;
+      border-top: 3px solid rgba(32,111,183,0.32);
+      border-right: 3px solid rgba(32,111,183,0.32);
+      border-bottom: 3px solid rgba(32,111,183,0.32);
+      border-left: 0;
+      pointer-events: none;
+    }
+
+    .feedback::after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: -2px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 13px solid rgba(32,111,183,0.56);
+    }
+
+    .feedback-label {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      width: 112px;
+      transform: translateY(-50%) rotate(90deg);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .message {
+      margin: 0 26px 22px;
+      padding: 15px 18px;
+      border-left: 6px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .message strong {
+      font-size: 16px;
+      color: var(--green);
+    }
+
+    .message span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      min-width: 300px;
+    }
+
+    .track-step {
+      height: 8px;
+      background: #e4e9f0;
+      overflow: hidden;
+    }
+
+    .track-step::before {
+      content: "";
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--absa-red);
+      transition: width 240ms ease;
+    }
+
+    .track-step.active::before {
+      width: 100%;
+    }
+
+    body.paused .packet {
+      animation-play-state: paused;
+    }
+
+    @keyframes moveDown {
+      0%, 15% {
+        top: 56px;
+        background: var(--absa-red);
+        box-shadow: 0 0 0 10px rgba(221,0,49,0.12);
+      }
+      25%, 40% {
+        top: 190px;
+        background: var(--gold);
+        box-shadow: 0 0 0 10px rgba(241,182,56,0.16);
+      }
+      50%, 65% {
+        top: 326px;
+        background: var(--green);
+        box-shadow: 0 0 0 10px rgba(17,131,93,0.14);
+      }
+      75%, 90% {
+        top: 462px;
+        background: var(--blue);
+        box-shadow: 0 0 0 10px rgba(32,111,183,0.14);
+      }
+      100% {
+        top: 56px;
+        background: var(--absa-red);
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .architecture {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .header,
+      .arch-head,
+      .message {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .header,
+      .main {
+        padding: 14px;
+      }
+
+      .arch-head h2,
+      .story h2 {
+        font-size: 30px;
+      }
+
+      .layer-row {
+        grid-template-columns: 1fr;
+      }
+
+      .packet,
+      .feedback,
+      .feedback-label {
+        display: none;
+      }
+
+      .timeline {
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand" aria-label="Absa Agent">
+        <div class="logo">A</div>
+        <div>
+          <h1>Absa Agent</h1>
+          <span>Slide 15 technical architecture</span>
+        </div>
+      </div>
+
+      <nav class="controls" aria-label="Architecture layer controls">
+        <button class="layer-btn active" type="button" data-layer="data">1 Data</button>
+        <button class="layer-btn" type="button" data-layer="agent">2 Agent</button>
+        <button class="layer-btn" type="button" data-layer="api">3 APIs</button>
+        <button class="layer-btn" type="button" data-layer="channels">4 Channels</button>
+        <button class="play-btn" type="button" id="toggleMotion" aria-label="Pause animation" title="Pause animation">&#10074;&#10074;</button>
+      </nav>
+
+      <div class="live-status">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="statusText">Data is being unified</span>
+      </div>
+    </header>
+
+    <main class="main">
+      <aside class="story">
+        <div class="story-head">
+          <div class="kicker">Simple architecture story</div>
+          <h2>Absa Agent connects existing platforms into one decision flow.</h2>
+        </div>
+
+        <section class="layer-copy" aria-live="polite">
+          <h3 id="layerTitle">Data Layer</h3>
+          <p id="layerBody">Customer, transaction, product, CRM, digital, consent, affordability, and outcome data are brought together as live context.</p>
+        </section>
+
+        <section class="plain-list" aria-label="Architecture layers">
+          <div class="plain-item active" data-side="data">
+            <div class="plain-icon">1</div>
+            <div><strong>Data Layer</strong><span>All customer clues and outcomes in one place.</span></div>
+          </div>
+          <div class="plain-item" data-side="agent">
+            <div class="plain-icon">2</div>
+            <div><strong>AI Agent / Decision Layer</strong><span>Turns context into a governed next best action.</span></div>
+          </div>
+          <div class="plain-item" data-side="api">
+            <div class="plain-icon">3</div>
+            <div><strong>API / Execution Layer</strong><span>Uses existing services to trigger work.</span></div>
+          </div>
+          <div class="plain-item" data-side="channels">
+            <div class="plain-icon">4</div>
+            <div><strong>Channels</strong><span>Customers and employees see the action.</span></div>
+          </div>
+        </section>
+
+        <div class="summary">
+          <strong>Architecture message:</strong> Absa Agent does not replace platforms. It orchestrates them.
+        </div>
+      </aside>
+
+      <section class="architecture" aria-label="Animated technical architecture">
+        <div class="arch-head">
+          <div>
+            <div class="kicker">Practical enterprise architecture</div>
+            <h2>Signals flow down. Outcomes flow back. The agent coordinates the middle.</h2>
+            <p>Each layer keeps its role clear: data provides context, the agent makes a governed decision, APIs execute it, and channels deliver the experience.</p>
+          </div>
+          <div class="badge">
+            <span>Core message</span>
+            Orchestrate, not replace
+          </div>
+        </div>
+
+        <div class="arch-map">
+          <div class="packet" aria-hidden="true"></div>
+          <div class="packet second" aria-hidden="true"></div>
+          <div class="packet third" aria-hidden="true"></div>
+          <div class="feedback" aria-hidden="true"></div>
+          <div class="feedback-label" aria-hidden="true">Outcome feedback</div>
+
+          <article class="layer-row active" data-row="data" data-layer="data">
+            <div class="layer-label">
+              <span>Layer 1</span>
+              <strong>Data Layer</strong>
+            </div>
+            <div class="components">
+              <div class="chip">Customer profile</div>
+              <div class="chip">Transactions</div>
+              <div class="chip">Product holdings</div>
+              <div class="chip">CRM history</div>
+              <div class="chip">Digital behaviour</div>
+              <div class="chip">Consent</div>
+              <div class="chip">Affordability</div>
+              <div class="chip">Outcome data</div>
+            </div>
+          </article>
+
+          <article class="layer-row" data-row="agent" data-layer="agent">
+            <div class="layer-label">
+              <span>Layer 2</span>
+              <strong>AI Agent / Decision Layer</strong>
+            </div>
+            <div class="components">
+              <div class="chip agent-core">Context builder</div>
+              <div class="chip agent-core">Intent detector</div>
+              <div class="chip agent-core">Rules engine</div>
+              <div class="chip agent-core">Next-best-action ranker</div>
+              <div class="chip agent-core">Policy guardrails</div>
+              <div class="chip agent-core">Explanation generator</div>
+              <div class="chip agent-core">Learning module</div>
+            </div>
+          </article>
+
+          <article class="layer-row" data-row="api" data-layer="api">
+            <div class="layer-label">
+              <span>Layer 3</span>
+              <strong>API / Execution Layer</strong>
+            </div>
+            <div class="components">
+              <div class="chip">API gateway</div>
+              <div class="chip">Prequalification API</div>
+              <div class="chip">Product eligibility API</div>
+              <div class="chip">CRM task API</div>
+              <div class="chip">Notification API</div>
+              <div class="chip">Appointment API</div>
+              <div class="chip">Document API</div>
+              <div class="chip">Analytics API</div>
+            </div>
+          </article>
+
+          <article class="layer-row" data-row="channels" data-layer="channels">
+            <div class="layer-label">
+              <span>Layer 4</span>
+              <strong>Channels</strong>
+            </div>
+            <div class="components">
+              <div class="chip">Absa app</div>
+              <div class="chip">Online banking</div>
+              <div class="chip">CRM</div>
+              <div class="chip">Call centre</div>
+              <div class="chip">Branch</div>
+              <div class="chip">Email</div>
+              <div class="chip">SMS</div>
+              <div class="chip">WhatsApp where permitted</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="message">
+          <div>
+            <strong id="messageTitle">Data becomes context</strong><br>
+            <span id="messageBody">The architecture starts by combining the signals needed to understand a customer's current situation.</span>
+          </div>
+          <div class="timeline" aria-hidden="true">
+            <div class="track-step active" data-track="data"></div>
+            <div class="track-step" data-track="agent"></div>
+            <div class="track-step" data-track="api"></div>
+            <div class="track-step" data-track="channels"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const layers = ["data", "agent", "api", "channels"];
+    const copy = {
+      data: {
+        title: "Data Layer",
+        body: "Customer, transaction, product, CRM, digital, consent, affordability, and outcome data are brought together as live context.",
+        status: "Data is being unified",
+        messageTitle: "Data becomes context",
+        messageBody: "The architecture starts by combining the signals needed to understand a customer's current situation."
+      },
+      agent: {
+        title: "AI Agent / Decision Layer",
+        body: "The agent builds context, detects intent, applies rules, ranks the next best action, checks guardrails, explains the decision, and learns.",
+        status: "The agent is deciding",
+        messageTitle: "Context becomes a decision",
+        messageBody: "This is the intelligence layer: it decides what should happen next and why it is allowed to happen."
+      },
+      api: {
+        title: "API / Execution Layer",
+        body: "Existing APIs turn the decision into action: prequalification, eligibility, CRM tasks, notifications, appointments, documents, and analytics.",
+        status: "APIs are executing",
+        messageTitle: "Decision becomes action",
+        messageBody: "The agent uses Absa services that already exist, so the idea is practical for a hackathon and scalable after."
+      },
+      channels: {
+        title: "Channels",
+        body: "The action reaches the customer or employee through the Absa app, online banking, CRM, call centre, branch, email, SMS, or WhatsApp where permitted.",
+        status: "Channels are updated",
+        messageTitle: "Action becomes experience",
+        messageBody: "Customers and employees see one coordinated journey, while outcomes feed back into the data layer."
+      }
+    };
+
+    const buttons = Array.from(document.querySelectorAll(".layer-btn"));
+    const rows = Array.from(document.querySelectorAll(".layer-row"));
+    const sideItems = Array.from(document.querySelectorAll("[data-side]"));
+    const tracks = Array.from(document.querySelectorAll(".track-step"));
+    const layerTitle = document.getElementById("layerTitle");
+    const layerBody = document.getElementById("layerBody");
+    const statusText = document.getElementById("statusText");
+    const messageTitle = document.getElementById("messageTitle");
+    const messageBody = document.getElementById("messageBody");
+    const toggleMotion = document.getElementById("toggleMotion");
+    let layerIndex = 0;
+    let paused = false;
+    let timer = window.setInterval(nextLayer, 3200);
+
+    function setLayer(layer) {
+      layerIndex = layers.indexOf(layer);
+      layerTitle.textContent = copy[layer].title;
+      layerBody.textContent = copy[layer].body;
+      statusText.textContent = copy[layer].status;
+      messageTitle.textContent = copy[layer].messageTitle;
+      messageBody.textContent = copy[layer].messageBody;
+
+      buttons.forEach((button) => button.classList.toggle("active", button.dataset.layer === layer));
+      rows.forEach((row) => row.classList.toggle("active", row.dataset.row === layer));
+      sideItems.forEach((item) => item.classList.toggle("active", item.dataset.side === layer));
+      tracks.forEach((track) => track.classList.toggle("active", layers.indexOf(track.dataset.track) <= layerIndex));
+    }
+
+    function nextLayer() {
+      setLayer(layers[(layerIndex + 1) % layers.length]);
+    }
+
+    function restartTimer() {
+      window.clearInterval(timer);
+      if (!paused) {
+        timer = window.setInterval(nextLayer, 3200);
+      }
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setLayer(button.dataset.layer);
+        restartTimer();
+      });
+    });
+
+    toggleMotion.addEventListener("click", () => {
+      paused = !paused;
+      document.body.classList.toggle("paused", paused);
+      toggleMotion.innerHTML = paused ? "&#9654;" : "&#10074;&#10074;";
+      toggleMotion.setAttribute("aria-label", paused ? "Resume animation" : "Pause animation");
+      restartTimer();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") {
+        nextLayer();
+        restartTimer();
+      }
+      if (event.key === "ArrowLeft") {
+        setLayer(layers[(layerIndex + layers.length - 1) % layers.length]);
+        restartTimer();
+      }
+      if (event.key === " ") {
+        event.preventDefault();
+        toggleMotion.click();
+      }
+    });
+  </script>
+</body>
+</html>
